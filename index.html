@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQ Test Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .question-container {
+            margin: 30px 0;
+        }
+
+        .question-number {
+            color: #764ba2;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .iq-score {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        .result-text {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .share-button {
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        .share-button.facebook { background: #1877f2; }
+        .share-button.twitter { background: #1da1f2; }
+        .share-button.whatsapp { background: #25d366; }
+
+        .name-input-screen {
+            text-align: center;
+        }
+
+        .name-input-screen input {
+            transition: border-color 0.3s ease;
+        }
+
+        .name-input-screen input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .leaderboard-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .leaderboard-item.current-user {
+            border-left-color: #ffd700;
+            background: #fff9c4;
+        }
+
+        .leaderboard-rank {
+            font-weight: bold;
+            color: #667eea;
+            min-width: 30px;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            text-align: left;
+            margin-left: 15px;
+            color: #333;
+        }
+
+        .leaderboard-score {
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .intro-screen {
+            text-align: center;
+        }
+
+        .intro-screen h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .intro-screen ul {
+            text-align: left;
+            color: #666;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .intro-screen li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .question-text {
+                font-size: 1.1em;
+            }
+
+            .iq-score {
+                font-size: 3em;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .timer {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timer" id="timer">Time: 15:00</div>
+        
+        <div class="intro-screen" id="introScreen">
+            <div class="header">
+                <h1>🧠 IQ Test Challenge</h1>
+                <p>Test your intelligence in 15 minutes</p>
+            </div>
+            <h2>How it works:</h2>
+            <ul>
+                <li>20 questions of varying difficulty</li>
+                <li>15 minutes to complete</li>
+                <li>Questions cover logic, math, and patterns</li>
+                <li>Your IQ score will be calculated instantly</li>
+                <li>Share your results with friends!</li>
+            </ul>
+            <button class="button" onclick="startTest()">Start Test</button>
+        </div>
+
+        <div class="test-screen" id="testScreen" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="question-container fade-in" id="questionContainer">
+                <div class="question-number" id="questionNumber">Question 1 of 20</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="button" onclick="previousQuestion()" id="prevBtn" disabled>Previous</button>
+                <button class="button" onclick="nextQuestion()" id="nextBtn" disabled>Next</button>
+            </div>
+        </div>
+
+        <div class="name-input-screen" id="nameInputScreen" style="display: none;">
+            <div class="header">
+                <h1>🎉 Test Complete!</h1>
+                <p>Enter your details to see your results and join the leaderboard</p>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <input type="text" id="userName" placeholder="Enter your name" 
+                       style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1.1em; margin-bottom: 15px;">
+                <input type="email" id="userEmail" placeholder="Enter your email (optional)" 
+                       style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1.1em; margin-bottom: 20px;">
+                <div style="font-size: 0.9em; color: #666; margin-bottom: 20px;">
+                    Your email is optional and will only be used for leaderboard notifications.
+                </div>
+            </div>
+            
+            <button class="button" onclick="submitResults()" id="submitBtn">View Results & Join Leaderboard</button>
+            <button class="button" onclick="skipNameEntry()" style="background: #6c757d;">Skip & View Results</button>
+        </div>
+
+        <div class="results" id="results">
+            <div class="header">
+                <h1>🎉 Your Results</h1>
+            </div>
+            <div class="iq-score" id="iqScore">120</div>
+            <div class="result-text" id="resultText">Above Average Intelligence</div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="correctAnswers">15</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="accuracy">75%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="timeUsed">12:30</div>
+                    <div class="stat-label">Time Used</div>
+                </div>
+            </div>
+
+            <div class="leaderboard" id="leaderboardSection" style="display: none;">
+                <h3 style="color: #333; margin: 20px 0;">🏆 Top 10 Leaderboard</h3>
+                <div class="leaderboard-list" id="leaderboardList"></div>
+            </div>
+
+            <div class="share-buttons">
+                <button class="share-button facebook" onclick="shareResult('facebook')">📘 Facebook</button>
+                <button class="share-button twitter" onclick="shareResult('twitter')">🐦 Twitter</button>
+                <button class="share-button whatsapp" onclick="shareResult('whatsapp')">📱 WhatsApp</button>
+            </div>
+
+            <button class="button" onclick="restartTest()">Take Test Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Replace this with your Google Apps Script Web App URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+        
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let timeLeft = 15 * 60; // 15 minutes in seconds
+        let timer;
+        let startTime;
+        let finalResults = {};
+
+        const questions = [
+            {
+                question: "What comes next in the sequence: 2, 4, 8, 16, ?",
+                options: ["24", "32", "30", "20"],
+                correct: 1
+            },
+            {
+                question: "If all Bloops are Razzles and all Razzles are Lazzles, then all Bloops are definitely:",
+                options: ["Lazzles", "Blue", "Razzles only", "None of the above"],
+                correct: 0
+            },
+            {
+                question: "What number should replace the question mark? 3, 7, 15, 31, ?",
+                options: ["63", "62", "61", "64"],
+                correct: 0
+            },
+            {
+                question: "Which word does not belong: Apple, Banana, Cherry, Potato",
+                options: ["Apple", "Banana", "Cherry", "Potato"],
+                correct: 3
+            },
+            {
+                question: "If you rearrange the letters 'CIFAIPC', you get:",
+                options: ["PACIFIC", "TRAFFIC", "CAPTION", "PLASTIC"],
+                correct: 0
+            },
+            {
+                question: "What comes next: △, ○, △, ○, △, ?",
+                options: ["△", "○", "□", "◇"],
+                correct: 1
+            },
+            {
+                question: "35 + 47 = ?",
+                options: ["82", "81", "83", "80"],
+                correct: 0
+            },
+            {
+                question: "Which number is missing: 1, 1, 2, 3, 5, 8, ?",
+                options: ["11", "12", "13", "14"],
+                correct: 2
+            },
+            {
+                question: "Book is to Reading as Fork is to:",
+                options: ["Eating", "Kitchen", "Spoon", "Food"],
+                correct: 0
+            },
+            {
+                question: "What is 15% of 200?",
+                options: ["25", "30", "35", "40"],
+                correct: 1
+            },
+            {
+                question: "Which pattern completes the sequence: ★☆★☆★ ?",
+                options: ["★", "☆", "●", "○"],
+                correct: 1
+            },
+            {
+                question: "If Monday is two days before Wednesday, what day is three days after Monday?",
+                options: ["Thursday", "Friday", "Saturday", "Sunday"],
+                correct: 0
+            },
+            {
+                question: "What is the next number: 100, 50, 25, 12.5, ?",
+                options: ["6.25", "6", "5.5", "5"],
+                correct: 0
+            },
+            {
+                question: "Clock is to Time as Thermometer is to:",
+                options: ["Heat", "Temperature", "Weather", "Degrees"],
+                correct: 1
+            },
+            {
+                question: "Which number doesn't fit: 2, 4, 6, 9, 10",
+                options: ["2", "4", "6", "9"],
+                correct: 3
+            },
+            {
+                question: "What comes next: A1, B2, C3, D4, ?",
+                options: ["E5", "F6", "E4", "D5"],
+                correct: 0
+            },
+            {
+                question: "If 3x + 7 = 22, what is x?",
+                options: ["4", "5", "6", "7"],
+                correct: 1
+            },
+            {
+                question: "Water is to Ice as Milk is to:",
+                options: ["Cream", "Butter", "Cheese", "Yogurt"],
+                correct: 2
+            },
+            {
+                question: "Complete the pattern: 1, 4, 9, 16, 25, ?",
+                options: ["30", "35", "36", "49"],
+                correct: 2
+            },
+            {
+                question: "Which comes next: MON, TUE, WED, THU, ?",
+                options: ["FRI", "SAT", "SUN", "WEEK"],
+                correct: 0
+            }
+        ];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startTest() {
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('testScreen').style.display = 'block';
+            
+            shuffleArray(questions);
+            startTime = Date.now();
+            startTimer();
+            displayQuestion();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = 
+                `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = option;
+                div.onclick = () => selectOption(index);
+                optionsContainer.appendChild(div);
+            });
+            
+            // Restore previous selection if exists
+            if (userAnswers[currentQuestion] !== undefined) {
+                const selectedOption = optionsContainer.children[userAnswers[currentQuestion]];
+                selectedOption.classList.add('selected');
+            }
+            
+            updateProgress();
+            updateButtons();
+        }
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            userAnswers[currentQuestion] = index;
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = userAnswers[currentQuestion] === undefined;
+            
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('nextBtn').textContent = 'Finish Test';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next';
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function finishTest() {
+            clearInterval(timer);
+            calculateScore();
+            showNameInput();
+        }
+
+        function calculateScore() {
+            score = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === questions[index].correct) {
+                    score++;
+                }
+            });
+            
+            // Store final results
+            const accuracy = Math.round((score / questions.length) * 100);
+            let iqScore;
+            
+            // IQ calculation based on accuracy
+            if (accuracy >= 95) iqScore = 140 + Math.floor(Math.random() * 10);
+            else if (accuracy >= 85) iqScore = 120 + Math.floor(Math.random() * 20);
+            else if (accuracy >= 70) iqScore = 110 + Math.floor(Math.random() * 15);
+            else if (accuracy >= 50) iqScore = 95 + Math.floor(Math.random() * 20);
+            else iqScore = 80 + Math.floor(Math.random() * 20);
+            
+            const timeUsed = Math.floor((Date.now() - startTime) / 1000);
+            
+            finalResults = {
+                iqScore: iqScore,
+                correctAnswers: score,
+                totalQuestions: questions.length,
+                accuracy: accuracy,
+                timeUsed: timeUsed
+            };
+        }
+
+        function showNameInput() {
+            document.getElementById('testScreen').style.display = 'none';
+            document.getElementById('nameInputScreen').style.display = 'block';
+        }
+
+        function submitResults() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            
+            if (!name) {
+                alert('Please enter your name to continue.');
+                return;
+            }
+            
+            // Prepare data for Google Sheets
+            const resultData = {
+                name: name,
+                email: email,
+                iqScore: finalResults.iqScore,
+                correctAnswers: finalResults.correctAnswers,
+                totalQuestions: finalResults.totalQuestions,
+                accuracy: finalResults.accuracy,
+                timeUsed: finalResults.timeUsed,
+                ipAddress: '', // Will be handled by Google Apps Script
+                userAgent: navigator.userAgent
+            };
+            
+            // Show loading
+            document.getElementById('submitBtn').textContent = 'Saving...';
+            document.getElementById('submitBtn').disabled = true;
+            
+            // Send to Google Apps Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showResults(true);
+                    loadLeaderboard();
+                } else {
+                    console.error('Error saving results:', data.message);
+                    showResults(false);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showResults(false);
+            });
+        }
+
+        function skipNameEntry() {
+            showResults(false);
+        }
+
+        function showResults(savedToLeaderboard = false) {
+            document.getElementById('nameInputScreen').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            let resultText;
+            if (finalResults.iqScore >= 140) resultText = "Genius Level! 🎯";
+            else if (finalResults.iqScore >= 120) resultText = "Superior Intelligence! 🌟";
+            else if (finalResults.iqScore >= 110) resultText = "Above Average Intelligence! 📈";
+            else if (finalResults.iqScore >= 90) resultText = "Average Intelligence 👍";
+            else resultText = "Below Average - Keep Learning! 📚";
+            
+            document.getElementById('iqScore').textContent = finalResults.iqScore;
+            document.getElementById('resultText').textContent = resultText;
+            document.getElementById('correctAnswers').textContent = finalResults.correctAnswers;
+            document.getElementById('accuracy').textContent = finalResults.accuracy + '%';
+            
+            const minutesUsed = Math.floor(finalResults.timeUsed / 60);
+            const secondsUsed = finalResults.timeUsed % 60;
+            document.getElementById('timeUsed').textContent = 
+                `${minutesUsed}:${secondsUsed.toString().padStart(2, '0')}`;
+            
+            if (savedToLeaderboard) {
+                document.getElementById('leaderboardSection').style.display = 'block';
+            }
+        }
+
+        function loadLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '<div class="loading">Loading leaderboard...</div>';
+            
+            fetch(GOOGLE_SCRIPT_URL + '?action=leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    displayLeaderboard(data.data);
+                } else {
+                    leaderboardList.innerHTML = '<div class="loading">No leaderboard data available</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading leaderboard:', error);
+                leaderboardList.innerHTML = '<div class="loading">Error loading leaderboard</div>';
+            });
+        }
+
+        function displayLeaderboard(leaderboard) {
+            const leaderboardList = document.getElementById('leaderboardList');
+            const currentUserName = document.getElementById('userName').value.trim();
+            
+            leaderboardList.innerHTML = '';
+            
+            leaderboard.forEach(entry => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                
+                if (entry.name === currentUserName) {
+                    item.classList.add('current-user');
+                }
+                
+                item.innerHTML = `
+                    <span class="leaderboard-rank">#${entry.rank}</span>
+                    <span class="leaderboard-name">${entry.name}</span>
+                    <span class="leaderboard-score">${entry.iqScore} IQ</span>
+                `;
+                
+                leaderboardList.appendChild(item);
+            });
+        }
+
+        function shareResult(platform) {
+            const iqScore = finalResults.iqScore;
+            const userName = document.getElementById('userName').value.trim();
+            const nameText = userName ? ` ${userName} scored` : ' I scored';
+            const text = `🧠${nameText} ${iqScore} IQ points! Can you beat this score? Take the test here: `;
+            const url = window.location.href;
+            
+            switch(platform) {
+                case 'facebook':
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+                    break;
+                case 'twitter':
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text + url)}`, '_blank');
+                    break;
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(text + url)}`, '_blank');
+                    break;
+            }
+        }
+
+        function restartTest() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            timeLeft = 15 * 60;
+            finalResults = {};
+            
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('nameInputScreen').style.display = 'none';
+            document.getElementById('introScreen').style.display = 'block';
+            document.getElementById('timer').textContent = 'Time: 15:00';
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('submitBtn').textContent = 'View Results & Join Leaderboard';
+            document.getElementById('submitBtn').disabled = false;
+        }
+    </script>
+</body>
+</html>
