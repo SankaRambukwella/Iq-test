@@ -266,6 +266,73 @@
             padding: 20px;
         }
 
+        .results-list {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            flex-wrap: wrap;
+        }
+
+        .result-item.current-user {
+            border-left-color: #ffd700;
+            background: #fff9c4;
+        }
+
+        .result-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .result-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .result-details {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .result-score {
+            font-weight: bold;
+            color: #764ba2;
+            font-size: 1.1em;
+        }
+
+        .show-all-btn {
+            background: #6c757d;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .result-score {
+                align-self: flex-end;
+            }
+        }
+
         .timer {
             position: absolute;
             top: 20px;
@@ -422,6 +489,12 @@
                 <div class="leaderboard-list" id="leaderboardList"></div>
             </div>
 
+            <div class="all-results" id="allResultsSection" style="display: none;">
+                <h3 style="color: #333; margin: 20px 0;">📊 All Test Results</h3>
+                <div class="results-list" id="allResultsList"></div>
+                <button class="button" onclick="toggleAllResults()" id="toggleResultsBtn">Show All Results</button>
+            </div>
+
             <div class="share-buttons">
                 <button class="share-button facebook" onclick="shareResult('facebook')">📘 Facebook</button>
                 <button class="share-button twitter" onclick="shareResult('twitter')">🐦 Twitter</button>
@@ -433,8 +506,16 @@
     </div>
 
     <script>
-        // Replace this with your Google Apps Script Web App URL
+        // Replace this with your actual Google Apps Script Web App URL
+        // Instructions: 
+        // 1. Go to https://script.google.com/
+        // 2. Create new project, paste the backend code
+        // 3. Deploy as web app with "Execute as: Me" and "Who has access: Anyone"
+        // 4. Copy the web app URL and replace below
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-yOmQ5bo4SdRoXirI_dIVH-TwLQizqHnbd-9RbMgr3ay_8AfePEjewzDzJ0rVhqnmfg/exec';
+        
+        // For testing without Google Apps Script (remove this in production)
+        const USE_MOCK_DATA = true;
         
         let currentQuestion = 0;
         let score = 0;
@@ -714,6 +795,18 @@
             document.getElementById('submitBtn').textContent = 'Saving...';
             document.getElementById('submitBtn').disabled = true;
             
+            // Use mock data for testing if Google Apps Script URL is not set
+            if (USE_MOCK_DATA || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+                // Mock successful save
+                setTimeout(() => {
+                    console.log('Mock data saved:', resultData);
+                    saveToMockStorage(resultData);
+                    showResults(true);
+                    loadLeaderboard();
+                }, 1000);
+                return;
+            }
+            
             // Send to Google Apps Script
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -729,13 +822,39 @@
                     loadLeaderboard();
                 } else {
                     console.error('Error saving results:', data.message);
+                    alert('Error saving to Google Sheets: ' + data.message);
                     showResults(false);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Error connecting to Google Apps Script. Please check your URL.');
                 showResults(false);
             });
+        }
+
+        // Mock storage for testing
+        function saveToMockStorage(data) {
+            let mockData = JSON.parse(localStorage.getItem('iqTestResults') || '[]');
+            data.timestamp = new Date().toISOString();
+            mockData.push(data);
+            localStorage.setItem('iqTestResults', JSON.stringify(mockData));
+        }
+
+        function getMockData() {
+            const data = JSON.parse(localStorage.getItem('iqTestResults') || '[]');
+            return data.map((item, index) => ({
+                ...item,
+                id: index + 1,
+                timestamp: new Date(item.timestamp),
+                formattedTime: formatTime(item.timeUsed)
+            }));
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
         }
 
         function skipNameEntry() {
@@ -765,6 +884,7 @@
             
             if (savedToLeaderboard) {
                 document.getElementById('leaderboardSection').style.display = 'block';
+                document.getElementById('allResultsSection').style.display = 'block';
             }
         }
 
@@ -772,11 +892,37 @@
             const leaderboardList = document.getElementById('leaderboardList');
             leaderboardList.innerHTML = '<div class="loading">Loading leaderboard...</div>';
             
+            if (USE_MOCK_DATA || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+                // Use mock data
+                setTimeout(() => {
+                    const mockData = getMockData();
+                    const leaderboard = mockData
+                        .sort((a, b) => b.iqScore - a.iqScore)
+                        .slice(0, 10)
+                        .map((item, index) => ({
+                            rank: index + 1,
+                            name: item.name,
+                            iqScore: item.iqScore,
+                            accuracy: item.accuracy,
+                            formattedTime: item.formattedTime
+                        }));
+                    
+                    if (leaderboard.length > 0) {
+                        displayLeaderboard(leaderboard);
+                        loadAllResults();
+                    } else {
+                        leaderboardList.innerHTML = '<div class="loading">No results yet. Be the first!</div>';
+                    }
+                }, 500);
+                return;
+            }
+            
             fetch(GOOGLE_SCRIPT_URL + '?action=leaderboard')
             .then(response => response.json())
             .then(data => {
                 if (data.success && data.data.length > 0) {
                     displayLeaderboard(data.data);
+                    loadAllResults();
                 } else {
                     leaderboardList.innerHTML = '<div class="loading">No leaderboard data available</div>';
                 }
@@ -784,6 +930,107 @@
             .catch(error => {
                 console.error('Error loading leaderboard:', error);
                 leaderboardList.innerHTML = '<div class="loading">Error loading leaderboard</div>';
+            });
+        }
+
+        function loadAllResults() {
+            const allResultsList = document.getElementById('allResultsList');
+            allResultsList.innerHTML = '<div class="loading">Loading all results...</div>';
+            
+            if (USE_MOCK_DATA || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+                // Use mock data
+                setTimeout(() => {
+                    const mockData = getMockData().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    displayAllResults(mockData);
+                }, 500);
+                return;
+            }
+            
+            fetch(GOOGLE_SCRIPT_URL + '?action=all')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    displayAllResults(data.data);
+                } else {
+                    allResultsList.innerHTML = '<div class="loading">No results data available</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading all results:', error);
+                allResultsList.innerHTML = '<div class="loading">Error loading results</div>';
+            });
+        }
+
+        function displayAllResults(results) {
+            const allResultsList = document.getElementById('allResultsList');
+            const currentUserName = document.getElementById('userName').value.trim();
+            
+            allResultsList.innerHTML = '';
+            
+            // Show first 5 results initially
+            const displayCount = results.length > 5 ? 5 : results.length;
+            
+            for (let i = 0; i < displayCount; i++) {
+                const result = results[i];
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                
+                if (result.name === currentUserName) {
+                    item.classList.add('current-user');
+                }
+                
+                const dateStr = new Date(result.timestamp).toLocaleDateString();
+                
+                item.innerHTML = `
+                    <div class="result-info">
+                        <div class="result-name">${result.name}</div>
+                        <div class="result-details">
+                            ${result.accuracy}% accuracy • ${result.formattedTime || formatTime(result.timeUsed)} • ${dateStr}
+                        </div>
+                    </div>
+                    <div class="result-score">${result.iqScore} IQ</div>
+                `;
+                
+                allResultsList.appendChild(item);
+            }
+            
+            // Show "Show More" button if there are more results
+            if (results.length > 5) {
+                const showMoreBtn = document.createElement('button');
+                showMoreBtn.className = 'button show-all-btn';
+                showMoreBtn.textContent = `Show All ${results.length} Results`;
+                showMoreBtn.onclick = () => showAllResults(results);
+                allResultsList.appendChild(showMoreBtn);
+            }
+        }
+
+        function showAllResults(results) {
+            const allResultsList = document.getElementById('allResultsList');
+            const currentUserName = document.getElementById('userName').value.trim();
+            
+            allResultsList.innerHTML = '';
+            
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                
+                if (result.name === currentUserName) {
+                    item.classList.add('current-user');
+                }
+                
+                const dateStr = new Date(result.timestamp).toLocaleDateString();
+                
+                item.innerHTML = `
+                    <div class="result-info">
+                        <div class="result-name">${result.name}</div>
+                        <div class="result-details">
+                            ${result.accuracy}% accuracy • ${result.formattedTime || formatTime(result.timeUsed)} • ${dateStr}
+                        </div>
+                    </div>
+                    <div class="result-score">${result.iqScore} IQ</div>
+                `;
+                
+                allResultsList.appendChild(item);
             });
         }
 
