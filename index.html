@@ -1061,6 +1061,59 @@
             document.addEventListener('touchend', function(e) {
                 e.target.classList.remove('touch-active');
             });
+
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPWwC4TQQIjVhVk31sRiDoPNDXkjn8CvffgJcMJU8KRQ1zPgoWIbKiFPsPZbKicteyFA/exec';
+
+      function submitScore() {
+        const name = document.getElementById('name').value;
+        const score = parseInt(document.getElementById('score').value);
+        const language = document.getElementById('language').value;
+
+        fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            score,
+            date: new Date().toLocaleDateString(),
+            timestamp: new Date().toISOString(),
+            language
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          loadLeaderboard();
+        })
+        .catch(err => {
+          alert('Error: ' + err);
+        });
+      }
+
+      function loadLeaderboard() {
+        fetch(SCRIPT_URL + '?action=getLeaderboard')
+          .then(res => res.json())
+          .then(data => {
+            const tbody = document.querySelector('#leaderboard tbody');
+            tbody.innerHTML = '';
+
+            data.scores.forEach(score => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${score.name}</td>
+                <td>${score.score}</td>
+                <td>${score.date}</td>
+                <td>${score.language}</td>
+              `;
+              tbody.appendChild(row);
+            });
+          });
+      }
+
+      // Load leaderboard on page load
+      window.onload = loadLeaderboard;
         }
     </script>
 
