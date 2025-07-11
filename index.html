@@ -26,30 +26,163 @@
             backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 450px;
             width: 100%;
+            max-width: 600px;
             padding: 30px;
             text-align: center;
-            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .header {
-            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
         }
 
-        .header h1 {
-            color: #333;
-            font-size: 2.2em;
-            margin-bottom: 10px;
+        .title {
+            font-size: 2.5em;
             background: linear-gradient(45deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
-        .header p {
+        .subtitle {
             color: #666;
             font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .lang-switch {
+            margin-bottom: 30px;
+        }
+
+        .lang-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            transform: scale(1.05);
+        }
+
+        .screen {
+            display: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .start-btn, .next-btn, .restart-btn, .share-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+        }
+
+        .start-btn:hover, .next-btn:hover, .restart-btn:hover, .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-number {
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option.selected {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
         }
 
         .progress-bar {
@@ -61,1039 +194,900 @@
         }
 
         .progress-fill {
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             height: 100%;
-            width: 0%;
-            transition: width 0.5s ease;
             border-radius: 10px;
+            transition: width 0.5s ease;
         }
 
-        .question-container {
-            margin: 30px 0;
+        .timer {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
         }
 
-        .question-number {
+        .result-score {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .iq-level {
+            font-size: 1.5em;
             color: #764ba2;
             font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
+            margin: 15px 0;
         }
 
-        .question-text {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 25px;
-            line-height: 1.4;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-            color: #333;
-        }
-
-        .option:hover {
-            background: #e9ecef;
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .option.selected {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 20px 10px;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .results {
-            display: none;
-            text-align: center;
-        }
-
-        .iq-score {
-            font-size: 4em;
-            font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 20px 0;
-        }
-
-        .result-text {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
+        .leaderboard {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
             padding: 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
-        .stat {
-            text-align: center;
+        .leaderboard-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
+        .leaderboard-item:first-child {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
         }
 
-        .stat-label {
-            color: #666;
-            font-size: 0.9em;
+        .leaderboard-item:nth-child(2) {
+            background: linear-gradient(45deg, #c0c0c0, #e6e6e6);
+        }
+
+        .leaderboard-item:nth-child(3) {
+            background: linear-gradient(45deg, #cd7f32, #daa520);
         }
 
         .share-buttons {
             display: flex;
-            gap: 10px;
             justify-content: center;
+            gap: 15px;
             margin: 20px 0;
-        }
-
-        .share-button {
-            background: #333;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background 0.3s ease;
-        }
-
-        .share-button.facebook { background: #1877f2; }
-        .share-button.twitter { background: #1da1f2; }
-        .share-button.whatsapp { background: #25d366; }
-
-        .name-input-screen {
-            text-align: center;
-        }
-
-        .name-input-screen input {
-            transition: border-color 0.3s ease;
-        }
-
-        .name-input-screen input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .leaderboard-list {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            margin: 5px 0;
-            background: white;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-        }
-
-        .leaderboard-item.current-user {
-            border-left-color: #ffd700;
-            background: #fff9c4;
-        }
-
-        .leaderboard-rank {
-            font-weight: bold;
-            color: #667eea;
-            min-width: 30px;
-        }
-
-        .leaderboard-name {
-            flex: 1;
-            text-align: left;
-            margin-left: 15px;
-            color: #333;
-        }
-
-        .leaderboard-score {
-            font-weight: bold;
-            color: #764ba2;
-        }
-
-        .loading {
-            text-align: center;
-            color: #666;
-            padding: 20px;
-        }
-
-        .results-list {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            margin: 5px 0;
-            background: white;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
             flex-wrap: wrap;
         }
 
-        .result-item.current-user {
-            border-left-color: #ffd700;
-            background: #fff9c4;
-        }
-
-        .result-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .result-name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .result-details {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        .result-score {
-            font-weight: bold;
-            color: #764ba2;
-            font-size: 1.1em;
-        }
-
-        .show-all-btn {
-            background: #6c757d;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 480px) {
-            .result-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .result-score {
-                align-self: flex-end;
-            }
-        }
-
-        .timer {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 15px;
+        .share-btn {
+            padding: 10px 20px;
             border-radius: 20px;
-            font-weight: bold;
-            color: #333;
+            font-size: 0.9em;
+            min-width: 120px;
         }
 
-        .intro-screen {
-            text-align: center;
+        .share-btn.facebook {
+            background: #3b5998;
         }
 
-        .intro-screen h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8em;
+        .share-btn.twitter {
+            background: #1da1f2;
         }
 
-        .intro-screen ul {
-            text-align: left;
-            color: #666;
-            margin: 20px 0;
-            padding-left: 20px;
+        .share-btn.whatsapp {
+            background: #25d366;
         }
 
-        .intro-screen li {
-            margin-bottom: 8px;
+        .share-btn.linkedin {
+            background: #0077b5;
         }
 
-        @media (max-width: 480px) {
+        .copyright {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            z-index: 1000;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
             .container {
                 padding: 20px;
                 margin: 10px;
             }
 
-            .header h1 {
-                font-size: 1.8em;
+            .title {
+                font-size: 2em;
             }
 
-            .question-text {
-                font-size: 1.1em;
+            .options {
+                grid-template-columns: 1fr;
             }
 
-            .iq-score {
-                font-size: 3em;
-            }
-
-            .stats {
+            .share-buttons {
                 flex-direction: column;
-                gap: 15px;
+                align-items: center;
             }
 
-            .timer {
-                position: static;
-                margin-bottom: 20px;
-                display: inline-block;
+            .share-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .lang-btn {
+                padding: 8px 16px;
+                font-size: 0.9em;
             }
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="timer" id="timer">Time: 15:00</div>
-        
-        <div class="intro-screen" id="introScreen">
-            <div class="header">
-                <h1>🧠 IQ Test Challenge</h1>
-                <p>Test your intelligence in 15 minutes</p>
+        <div class="header">
+            <h1 class="title">IQ Test Challenge</h1>
+            <p class="subtitle">Test Your Intelligence</p>
+            
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="switchLanguage('en')">English</button>
+                <button class="lang-btn" onclick="switchLanguage('si')">සිංහල</button>
             </div>
-            <h2>How it works:</h2>
-            <ul>
-                <li>20 questions of varying difficulty</li>
-                <li>15 minutes to complete</li>
-                <li>Questions cover logic, math, and patterns</li>
-                <li>Your IQ score will be calculated instantly</li>
-                <li>Share your results with friends!</li>
-            </ul>
-            <button class="button" onclick="startTest()">Start Test</button>
         </div>
 
-        <div class="test-screen" id="testScreen" style="display: none;">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+        <!-- Home Screen -->
+        <div class="screen active" id="home-screen">
+            <div class="question-container">
+                <h2 data-en="Welcome to the IQ Test!" data-si="IQ පරීක්ෂණයට සාදරයෙන් පිළිගනිමු!">Welcome to the IQ Test!</h2>
+                <p data-en="Test your intelligence with 20 challenging questions. You'll have 30 seconds per question." data-si="ප්‍රශ්න 20කින් ඔබේ බුද්ධිමත්භාවය පරීක්ෂා කරන්න. එක් ප්‍රශ්නයකට තත්පර 30ක් ලැබේ.">Test your intelligence with 20 challenging questions. You'll have 30 seconds per question.</p>
             </div>
+            <button class="start-btn" onclick="startTest()" data-en="Start Test" data-si="පරීක්ෂණය ආරම්භ කරන්න">Start Test</button>
+        </div>
 
-            <div class="question-container fade-in" id="questionContainer">
-                <div class="question-number" id="questionNumber">Question 1 of 20</div>
-                <div class="question-text" id="questionText"></div>
+        <!-- Test Screen -->
+        <div class="screen" id="test-screen">
+            <div class="question-number" id="question-number">Question 1 of 20</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="timer" id="timer">30</div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
                 <div class="options" id="options"></div>
             </div>
-
-            <div style="margin-top: 30px;">
-                <button class="button" onclick="previousQuestion()" id="prevBtn" disabled>Previous</button>
-                <button class="button" onclick="nextQuestion()" id="nextBtn" disabled>Next</button>
-            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()" data-en="Next Question" data-si="මීළඟ ප්‍රශ්නය">Next Question</button>
         </div>
 
-        <div class="name-input-screen" id="nameInputScreen" style="display: none;">
-            <div class="header">
-                <h1>🎉 Test Complete!</h1>
-                <p>Enter your details to see your results and join the leaderboard</p>
+        <!-- Results Screen -->
+        <div class="screen" id="results-screen">
+            <div class="question-container">
+                <h2 data-en="Your Results" data-si="ඔබේ ප්‍රතිඵල">Your Results</h2>
+                <div class="result-score" id="final-score">0</div>
+                <div class="iq-level" id="iq-level"></div>
+                <p id="result-description"></p>
             </div>
             
-            <div style="margin: 30px 0;">
-                <input type="text" id="userName" placeholder="Enter your name" 
-                       style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1.1em; margin-bottom: 15px;">
-                <input type="email" id="userEmail" placeholder="Enter your email (optional)" 
-                       style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1.1em; margin-bottom: 20px;">
-                <div style="font-size: 0.9em; color: #666; margin-bottom: 20px;">
-                    Your email is optional and will only be used for leaderboard notifications.
-                </div>
-            </div>
-            
-            <button class="button" onclick="submitResults()" id="submitBtn">View Results & Join Leaderboard</button>
-            <button class="button" onclick="skipNameEntry()" style="background: #6c757d;">Skip & View Results</button>
-        </div>
-
-        <div class="results" id="results">
-            <div class="header">
-                <h1>🎉 Your Results</h1>
-            </div>
-            <div class="iq-score" id="iqScore">120</div>
-            <div class="result-text" id="resultText">Above Average Intelligence</div>
-            
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-number" id="correctAnswers">15</div>
-                    <div class="stat-label">Correct</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number" id="accuracy">75%</div>
-                    <div class="stat-label">Accuracy</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number" id="timeUsed">12:30</div>
-                    <div class="stat-label">Time Used</div>
-                </div>
-            </div>
-
-            <div class="leaderboard" id="leaderboardSection" style="display: none;">
-                <h3 style="color: #333; margin: 20px 0;">🏆 Top 10 Leaderboard</h3>
-                <div class="leaderboard-list" id="leaderboardList"></div>
-            </div>
-
-            <div class="all-results" id="allResultsSection" style="display: none;">
-                <h3 style="color: #333; margin: 20px 0;">📊 All Test Results</h3>
-                <div class="results-list" id="allResultsList"></div>
-                <button class="button" onclick="toggleAllResults()" id="toggleResultsBtn">Show All Results</button>
-            </div>
-
             <div class="share-buttons">
-                <button class="share-button facebook" onclick="shareResult('facebook')">📘 Facebook</button>
-                <button class="share-button twitter" onclick="shareResult('twitter')">🐦 Twitter</button>
-                <button class="share-button whatsapp" onclick="shareResult('whatsapp')">📱 WhatsApp</button>
+                <button class="share-btn facebook" onclick="shareResult('facebook')" data-en="Share on Facebook" data-si="Facebook හි බෙදාගන්න">Share on Facebook</button>
+                <button class="share-btn twitter" onclick="shareResult('twitter')" data-en="Share on Twitter" data-si="Twitter හි බෙදාගන්න">Share on Twitter</button>
+                <button class="share-btn whatsapp" onclick="shareResult('whatsapp')" data-en="Share on WhatsApp" data-si="WhatsApp හි බෙදාගන්න">Share on WhatsApp</button>
+                <button class="share-btn linkedin" onclick="shareResult('linkedin')" data-en="Share on LinkedIn" data-si="LinkedIn හි බෙදාගන්න">Share on LinkedIn</button>
             </div>
+            
+            <button class="restart-btn" onclick="restartTest()" data-en="Take Test Again" data-si="නැවත පරීක්ෂණය කරන්න">Take Test Again</button>
+        </div>
 
-            <button class="button" onclick="restartTest()">Take Test Again</button>
+        <!-- Leaderboard Screen -->
+        <div class="screen" id="leaderboard-screen">
+            <h2 data-en="Top Scores" data-si="ඉහළම ලකුණු">Top Scores</h2>
+            <div class="leaderboard" id="leaderboard"></div>
+            <button class="restart-btn" onclick="showHome()" data-en="Back to Home" data-si="මුල් පිටුවට">Back to Home</button>
         </div>
     </div>
 
+    <div class="copyright">
+        © 2025 Developed by Sanka Rambukwella
+    </div>
+
     <script>
-        // Replace this with your actual Google Apps Script Web App URL
-        // Instructions: 
-        // 1. Go to https://script.google.com/
-        // 2. Create new project, paste the backend code
-        // 3. Deploy as web app with "Execute as: Me" and "Who has access: Anyone"
-        // 4. Copy the web app URL and replace below
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-yOmQ5bo4SdRoXirI_dIVH-TwLQizqHnbd-9RbMgr3ay_8AfePEjewzDzJ0rVhqnmfg/exec';
-        
-        // For testing without Google Apps Script (remove this in production)
-        const USE_MOCK_DATA = true;
-        
+        let currentLanguage = 'en';
         let currentQuestion = 0;
         let score = 0;
-        let userAnswers = [];
-        let timeLeft = 15 * 60; // 15 minutes in seconds
+        let timeLeft = 30;
         let timer;
+        let selectedAnswer = null;
         let startTime;
-        let finalResults = {};
 
-        const questions = [
-            {
-                question: "What comes next in the sequence: 2, 4, 8, 16, ?",
-                options: ["24", "32", "30", "20"],
-                correct: 1
-            },
-            {
-                question: "If all Bloops are Razzles and all Razzles are Lazzles, then all Bloops are definitely:",
-                options: ["Lazzles", "Blue", "Razzles only", "None of the above"],
-                correct: 0
-            },
-            {
-                question: "What number should replace the question mark? 3, 7, 15, 31, ?",
-                options: ["63", "62", "61", "64"],
-                correct: 0
-            },
-            {
-                question: "Which word does not belong: Apple, Banana, Cherry, Potato",
-                options: ["Apple", "Banana", "Cherry", "Potato"],
-                correct: 3
-            },
-            {
-                question: "If you rearrange the letters 'CIFAIPC', you get:",
-                options: ["PACIFIC", "TRAFFIC", "CAPTION", "PLASTIC"],
-                correct: 0
-            },
-            {
-                question: "What comes next: △, ○, △, ○, △, ?",
-                options: ["△", "○", "□", "◇"],
-                correct: 1
-            },
-            {
-                question: "35 + 47 = ?",
-                options: ["82", "81", "83", "80"],
-                correct: 0
-            },
-            {
-                question: "Which number is missing: 1, 1, 2, 3, 5, 8, ?",
-                options: ["11", "12", "13", "14"],
-                correct: 2
-            },
-            {
-                question: "Book is to Reading as Fork is to:",
-                options: ["Eating", "Kitchen", "Spoon", "Food"],
-                correct: 0
-            },
-            {
-                question: "What is 15% of 200?",
-                options: ["25", "30", "35", "40"],
-                correct: 1
-            },
-            {
-                question: "Which pattern completes the sequence: ★☆★☆★ ?",
-                options: ["★", "☆", "●", "○"],
-                correct: 1
-            },
-            {
-                question: "If Monday is two days before Wednesday, what day is three days after Monday?",
-                options: ["Thursday", "Friday", "Saturday", "Sunday"],
-                correct: 0
-            },
-            {
-                question: "What is the next number: 100, 50, 25, 12.5, ?",
-                options: ["6.25", "6", "5.5", "5"],
-                correct: 0
-            },
-            {
-                question: "Clock is to Time as Thermometer is to:",
-                options: ["Heat", "Temperature", "Weather", "Degrees"],
-                correct: 1
-            },
-            {
-                question: "Which number doesn't fit: 2, 4, 6, 9, 10",
-                options: ["2", "4", "6", "9"],
-                correct: 3
-            },
-            {
-                question: "What comes next: A1, B2, C3, D4, ?",
-                options: ["E5", "F6", "E4", "D5"],
-                correct: 0
-            },
-            {
-                question: "If 3x + 7 = 22, what is x?",
-                options: ["4", "5", "6", "7"],
-                correct: 1
-            },
-            {
-                question: "Water is to Ice as Milk is to:",
-                options: ["Cream", "Butter", "Cheese", "Yogurt"],
-                correct: 2
-            },
-            {
-                question: "Complete the pattern: 1, 4, 9, 16, 25, ?",
-                options: ["30", "35", "36", "49"],
-                correct: 2
-            },
-            {
-                question: "Which comes next: MON, TUE, WED, THU, ?",
-                options: ["FRI", "SAT", "SUN", "WEEK"],
-                correct: 0
-            }
-        ];
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function startTest() {
-            document.getElementById('introScreen').style.display = 'none';
-            document.getElementById('testScreen').style.display = 'block';
-            
-            shuffleArray(questions);
-            startTime = Date.now();
-            startTimer();
-            displayQuestion();
-        }
-
-        function startTimer() {
-            timer = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('timer').textContent = 
-                    `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    finishTest();
+        // IQ Test Questions Database
+        const questions = {
+            en: [
+                {
+                    question: "What comes next in the sequence: 2, 4, 8, 16, ?",
+                    options: ["24", "32", "20", "28"],
+                    correct: 1
+                },
+                {
+                    question: "If all roses are flowers and some flowers are red, which statement is true?",
+                    options: ["All roses are red", "Some roses might be red", "No roses are red", "All flowers are roses"],
+                    correct: 1
+                },
+                {
+                    question: "What is the missing number: 1, 1, 2, 3, 5, 8, ?",
+                    options: ["11", "13", "15", "10"],
+                    correct: 1
+                },
+                {
+                    question: "Which word doesn't belong: Cat, Dog, Bird, Fish, Table",
+                    options: ["Cat", "Dog", "Bird", "Table"],
+                    correct: 3
+                },
+                {
+                    question: "If you rearrange the letters 'CIFAIPC', you get the name of a/an:",
+                    options: ["Country", "Animal", "Ocean", "City"],
+                    correct: 2
+                },
+                {
+                    question: "What is 25% of 80?",
+                    options: ["15", "20", "25", "30"],
+                    correct: 1
+                },
+                {
+                    question: "Complete the analogy: Book is to Reading as Fork is to:",
+                    options: ["Eating", "Cooking", "Kitchen", "Spoon"],
+                    correct: 0
+                },
+                {
+                    question: "Which number should replace the question mark: 3, 6, 12, 24, ?",
+                    options: ["36", "48", "42", "30"],
+                    correct: 1
+                },
+                {
+                    question: "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?",
+                    options: ["100 minutes", "20 minutes", "5 minutes", "1 minute"],
+                    correct: 2
+                },
+                {
+                    question: "What comes next: A, C, F, J, O, ?",
+                    options: ["S", "T", "U", "V"],
+                    correct: 2
+                },
+                {
+                    question: "If you have 3 apples and you take away 2, how many do you have?",
+                    options: ["1", "2", "3", "0"],
+                    correct: 1
+                },
+                {
+                    question: "What is the square root of 144?",
+                    options: ["11", "12", "13", "14"],
+                    correct: 1
+                },
+                {
+                    question: "Complete the pattern: 1, 4, 9, 16, 25, ?",
+                    options: ["30", "35", "36", "49"],
+                    correct: 2
+                },
+                {
+                    question: "Which shape has the most sides: Triangle, Square, Pentagon, Hexagon?",
+                    options: ["Triangle", "Square", "Pentagon", "Hexagon"],
+                    correct: 3
+                },
+                {
+                    question: "If today is Monday, what day will it be in 100 days?",
+                    options: ["Monday", "Tuesday", "Wednesday", "Thursday"],
+                    correct: 1
+                },
+                {
+                    question: "What is 7 × 8 × 0 × 5?",
+                    options: ["280", "0", "35", "40"],
+                    correct: 1
+                },
+                {
+                    question: "Which number is different: 2, 4, 6, 8, 9, 10?",
+                    options: ["2", "4", "9", "10"],
+                    correct: 2
+                },
+                {
+                    question: "Complete: Water is to Ice as Milk is to:",
+                    options: ["Cream", "Butter", "Cheese", "Yogurt"],
+                    correct: 2
+                },
+                {
+                    question: "What is the next prime number after 17?",
+                    options: ["18", "19", "20", "21"],
+                    correct: 1
+                },
+                {
+                    question: "If a clock shows 3:15, what is the angle between the hour and minute hands?",
+                    options: ["0°", "7.5°", "15°", "22.5°"],
+                    correct: 1
                 }
-            }, 1000);
+            ],
+            si: [
+                {
+                    question: "අනුක්‍රමයේ මීළඟ සංඛ්‍යාව කුමක්ද: 2, 4, 8, 16, ?",
+                    options: ["24", "32", "20", "28"],
+                    correct: 1
+                },
+                {
+                    question: "සියලු රෝස මල් වන අතර සමහර මල් රතු නම්, සත්‍ය ප්‍රකාශනය කුමක්ද?",
+                    options: ["සියලු රෝස රතු ය", "සමහර රෝස රතු විය හැක", "කිසිදු රෝසයක් රතු නැත", "සියලු මල් රෝස ය"],
+                    correct: 1
+                },
+                {
+                    question: "අස්ථානගත සංඛ්‍යාව කුමක්ද: 1, 1, 2, 3, 5, 8, ?",
+                    options: ["11", "13", "15", "10"],
+                    correct: 1
+                },
+                {
+                    question: "කුමන වචනය අනෙක් ඒවාට අයත් නොවේද: බළලා, බල්ලා, කුරුල්ලා, මාළුවා, මේසය",
+                    options: ["බළලා", "බල්ලා", "කුරුල්ලා", "මේසය"],
+                    correct: 3
+                },
+                {
+                    question: "'CIFAIPC' අකුරු නැවත සකසන්නේ නම් ලැබෙන්නේ:",
+                    options: ["රටක නම", "සතෙකුගේ නම", "සාගරයක නම", "නගරයක නම"],
+                    correct: 2
+                },
+                {
+                    question: "80 හි 25% කීයද?",
+                    options: ["15", "20", "25", "30"],
+                    correct: 1
+                },
+                {
+                    question: "සාදෘශ්‍යය සම්පූර්ණ කරන්න: පොත කියවීමට යම් සේ දෙබලක කුමකට ද:",
+                    options: ["කෑමට", "උයන්න", "කුස්සියට", "හැන්දකට"],
+                    correct: 0
+                },
+                {
+                    question: "ප්‍රශ්න ලකුණ වෙනුවට එන සංඛ්‍යාව: 3, 6, 12, 24, ?",
+                    options: ["36", "48", "42", "30"],
+                    correct: 1
+                },
+                {
+                    question: "යන්ත්‍ර 5ක් විනාඩි 5කින් කෑලි 5ක් හැදුවහොත්, යන්ත්‍ර 100ක් කෑලි 100ක් හැදීමට කාලය?",
+                    options: ["විනාඩි 100", "විනාඩි 20", "විනාඩි 5", "විනාඩි 1"],
+                    correct: 2
+                },
+                {
+                    question: "මීළඟ අකුර: A, C, F, J, O, ?",
+                    options: ["S", "T", "U", "V"],
+                    correct: 2
+                },
+                {
+                    question: "ඔබ අසුරන්නතේ 3ක් තිබී 2ක් ගත්තහොත්, ඔබ සතුව කීයක් තිබේද?",
+                    options: ["1", "2", "3", "0"],
+                    correct: 1
+                },
+                {
+                    question: "144 හි වර්ග මූලය කුමක්ද?",
+                    options: ["11", "12", "13", "14"],
+                    correct: 1
+                },
+                {
+                    question: "රටාව සම්පූර්ණ කරන්න: 1, 4, 9, 16, 25, ?",
+                    options: ["30", "35", "36", "49"],
+                    correct: 2
+                },
+                {
+                    question: "වැඩිම පැති ප්‍රමාණය ඇති හැඩය: ත්‍රිකෝණය, චතුරස්‍රය, පංචකෝණය, ෂඩ්කෝණය?",
+                    options: ["ත්‍රිකෝණය", "චතුරස්‍රය", "පංචකෝණය", "ෂඩ්කෝණය"],
+                    correct: 3
+                },
+                {
+                    question: "අද සඳුදා නම්, දින 100කින් කුමන දිනයක් වේද?",
+                    options: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා"],
+                    correct: 1
+                },
+                {
+                    question: "7 × 8 × 0 × 5 = ?",
+                    options: ["280", "0", "35", "40"],
+                    correct: 1
+                },
+                {
+                    question: "වෙනස් සංඛ්‍යාව: 2, 4, 6, 8, 9, 10?",
+                    options: ["2", "4", "9", "10"],
+                    correct: 2
+                },
+                {
+                    question: "සම්පූර්ණ කරන්න: වතුර අයිස්වලට යම් සේ කිරි කුමකට ද:",
+                    options: ["ක්‍රීම්", "බටර්", "චීස්", "දමුරු"],
+                    correct: 2
+                },
+                {
+                    question: "17 ට පසු මීළඟ ප්‍රාථමික සංඛ්‍යාව?",
+                    options: ["18", "19", "20", "21"],
+                    correct: 1
+                },
+                {
+                    question: "ඔරලෝසුවක 3:15 පෙන්වන්නේ නම්, කාල සහ මිනිත්තු ඉඳිකටුවේ කෝණය?",
+                    options: ["0°", "7.5°", "15°", "22.5°"],
+                    correct: 1
+                }
+            ]
+        };
+
+        // Initialize the app
+        function init() {
+            updateLanguage();
+            loadLeaderboard();
         }
 
-        function displayQuestion() {
-            const question = questions[currentQuestion];
-            document.getElementById('questionNumber').textContent = 
-                `Question ${currentQuestion + 1} of ${questions.length}`;
-            document.getElementById('questionText').textContent = question.question;
+        // Language switching
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-en]').forEach(element => {
+                element.textContent = element.getAttribute('data-' + currentLanguage);
+            });
+        }
+
+        // Test functionality
+        function startTest() {
+            currentQuestion = 0;
+            score = 0;
+            startTime = Date.now();
+            showScreen('test-screen');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions[currentLanguage].length) {
+                endTest();
+                return;
+            }
+
+            const question = questions[currentLanguage][currentQuestion];
             
+            // Update question display
+            document.getElementById('question-number').textContent = 
+                currentLanguage === 'en' ? 
+                `Question ${currentQuestion + 1} of ${questions[currentLanguage].length}` :
+                `ප්‍රශ්නය ${currentQuestion + 1}/${questions[currentLanguage].length}`;
+            
+            document.getElementById('question-text').textContent = question.question;
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / questions[currentLanguage].length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            // Load options
             const optionsContainer = document.getElementById('options');
             optionsContainer.innerHTML = '';
             
             question.options.forEach((option, index) => {
-                const div = document.createElement('div');
-                div.className = 'option';
-                div.textContent = option;
-                div.onclick = () => selectOption(index);
-                optionsContainer.appendChild(div);
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectAnswer(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
             });
             
-            // Restore previous selection if exists
-            if (userAnswers[currentQuestion] !== undefined) {
-                const selectedOption = optionsContainer.children[userAnswers[currentQuestion]];
-                selectedOption.classList.add('selected');
-            }
+            // Reset timer
+            timeLeft = 30;
+            startTimer();
             
-            updateProgress();
-            updateButtons();
+            // Reset next button
+            selectedAnswer = null;
+            document.getElementById('next-btn').classList.add('disabled');
         }
 
-        function selectOption(index) {
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => option.classList.remove('selected'));
-            options[index].classList.add('selected');
+        function selectAnswer(index, element) {
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             
-            userAnswers[currentQuestion] = index;
-            updateButtons();
+            // Select current option
+            element.classList.add('selected');
+            selectedAnswer = index;
+            
+            // Enable next button
+            document.getElementById('next-btn').classList.remove('disabled');
         }
 
-        function updateButtons() {
-            document.getElementById('prevBtn').disabled = currentQuestion === 0;
-            document.getElementById('nextBtn').disabled = userAnswers[currentQuestion] === undefined;
-            
-            if (currentQuestion === questions.length - 1) {
-                document.getElementById('nextBtn').textContent = 'Finish Test';
-            } else {
-                document.getElementById('nextBtn').textContent = 'Next';
-            }
-        }
-
-        function updateProgress() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    nextQuestion();
+                }
+            }, 1000);
         }
 
         function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                displayQuestion();
-            } else {
-                finishTest();
-            }
-        }
-
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                displayQuestion();
-            }
-        }
-
-        function finishTest() {
-            clearInterval(timer);
-            calculateScore();
-            showNameInput();
-        }
-
-        function calculateScore() {
-            score = 0;
-            userAnswers.forEach((answer, index) => {
-                if (answer === questions[index].correct) {
+            if (selectedAnswer !== null) {
+                const question = questions[currentLanguage][currentQuestion];
+                if (selectedAnswer === question.correct) {
                     score++;
                 }
-            });
-            
-            // Store final results
-            const accuracy = Math.round((score / questions.length) * 100);
-            let iqScore;
-            
-            // IQ calculation based on accuracy
-            if (accuracy >= 95) iqScore = 140 + Math.floor(Math.random() * 10);
-            else if (accuracy >= 85) iqScore = 120 + Math.floor(Math.random() * 20);
-            else if (accuracy >= 70) iqScore = 110 + Math.floor(Math.random() * 15);
-            else if (accuracy >= 50) iqScore = 95 + Math.floor(Math.random() * 20);
-            else iqScore = 80 + Math.floor(Math.random() * 20);
-            
-            const timeUsed = Math.floor((Date.now() - startTime) / 1000);
-            
-            finalResults = {
-                iqScore: iqScore,
-                correctAnswers: score,
-                totalQuestions: questions.length,
-                accuracy: accuracy,
-                timeUsed: timeUsed
-            };
-        }
-
-        function showNameInput() {
-            document.getElementById('testScreen').style.display = 'none';
-            document.getElementById('nameInputScreen').style.display = 'block';
-        }
-
-        function submitResults() {
-            const name = document.getElementById('userName').value.trim();
-            const email = document.getElementById('userEmail').value.trim();
-            
-            if (!name) {
-                alert('Please enter your name to continue.');
-                return;
             }
             
-            // Prepare data for Google Sheets
-            const resultData = {
-                name: name,
-                email: email,
-                iqScore: finalResults.iqScore,
-                correctAnswers: finalResults.correctAnswers,
-                totalQuestions: finalResults.totalQuestions,
-                accuracy: finalResults.accuracy,
-                timeUsed: finalResults.timeUsed,
-                ipAddress: '', // Will be handled by Google Apps Script
-                userAgent: navigator.userAgent
-            };
+            currentQuestion++;
+            clearInterval(timer);
             
-            // Show loading
-            document.getElementById('submitBtn').textContent = 'Saving...';
-            document.getElementById('submitBtn').disabled = true;
+            if (currentQuestion >= questions[currentLanguage].length) {
+                endTest();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function endTest() {
+            clearInterval(timer);
             
-            // Use mock data for testing if Google Apps Script URL is not set
-            if (USE_MOCK_DATA || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
-                // Mock successful save
-                setTimeout(() => {
-                    console.log('Mock data saved:', resultData);
-                    saveToMockStorage(resultData);
-                    showResults(true);
-                    loadLeaderboard();
-                }, 1000);
-                return;
+            // Calculate IQ score
+            const totalTime = Math.round((Date.now() - startTime) / 1000);
+            const accuracy = (score / questions[currentLanguage].length) * 100;
+            const timeBonus = Math.max(0, (600 - totalTime) / 10); // Bonus for speed
+            const iqScore = Math.round(85 + (accuracy * 0.3) + timeBonus);
+            
+            // Display results
+            document.getElementById('final-score').textContent = iqScore;
+            
+            // Determine IQ level
+            let level, description;
+            if (iqScore >= 140) {
+                level = currentLanguage === 'en' ? 'Genius' : 'ප්‍රතිභාවන්ත';
+                description = currentLanguage === 'en' ? 
+                    'Exceptional intelligence! You\'re in the top 1% of the population.' :
+                    'සුවිශේෂී බුද්ධිමත්භාවයක්! ඔබ ජනගහනයෙන් 1% ට අයත් වේ.';
+            } else if (iqScore >= 120) {
+                level = currentLanguage === 'en' ? 'Superior' : 'උසස්';
+                description = currentLanguage === 'en' ? 
+                    'Above average intelligence. Great problem-solving abilities!' :
+                    'සාමාන්‍යයට වඩා ඉහළ බුද්ධිමත්භාවයක්. විශිෂ්ට ගැටලු විසඳීමේ හැකියාවක්!';
+            } else if (iqScore >= 110) {
+                level = currentLanguage === 'en' ? 'High Average' : 'ඉහළ සාමාන්‍ය';
+                description = currentLanguage === 'en' ? 
+                    'Good intelligence level. Well above average performance.' :
+                    'හොඳ බුද්ධිමත්භාවයක්. සාමාන්‍යයට වඩා හොඳ කාර්ය සාධනයක්.';
+            } else if (iqScore >= 90) {
+                level = currentLanguage === 'en' ? 'Average' : 'සාමාන්‍ය';
+                description = currentLanguage === 'en' ? 
+                    'Average intelligence. Good logical thinking skills.' :
+                    'සාමාන්‍ය බුද්ධිමත්භාවයක්. හොඳ තාර්කික චින්තන හැකියාවක්.';
+            } else {
+                level = currentLanguage === 'en' ? 'Below Average' : 'සාමාන්‍යයට වඩා අඩු';
+                description = currentLanguage === 'en' ? 
+                    'Room for improvement. Keep practicing to enhance your skills!' :
+                    'දියුණුවීමට ඉඩ ඇත. ඔබේ හැකියාවන් වැඩිදියුණු කිරීමට අඛණ්ඩව අභ්‍යාස කරන්න!';
             }
             
-            // Send to Google Apps Script
-            fetch(GOOGLE_SCRIPT_URL, {
+            document.getElementById('iq-level').textContent = level;
+            document.getElementById('result-description').textContent = description;
+            
+            // Save to leaderboard
+            saveScore(iqScore);
+            
+            showScreen('results-screen');
+        }
+
+        function saveScore(iqScore) {
+            const playerName = prompt(
+                currentLanguage === 'en' ? 
+                'Enter your name for the leaderboard:' : 
+                'ලීඩර්බෝර්ඩ් සඳහා ඔබේ නම ඇතුළත් කරන්න:'
+            ) || (currentLanguage === 'en' ? 'Anonymous' : 'නිර්නාමික');
+            
+            const scoreData = {
+                name: playerName,
+                score: iqScore,
+                date: new Date().toLocaleDateString(),
+                timestamp: Date.now()
+            };
+            
+            // Save to local storage
+            let leaderboard = JSON.parse(localStorage.getItem('iqTestLeaderboard') || '[]');
+            leaderboard.push(scoreData);
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 10); // Keep top 10
+            localStorage.setItem('iqTestLeaderboard', JSON.stringify(leaderboard));
+            
+            // Send to Google Sheets (you'll need to implement the Google Apps Script)
+            sendToGoogleSheets(scoreData);
+        }
+
+        function sendToGoogleSheets(scoreData) {
+            // Google Apps Script Web App URL - Replace with your actual URL
+            const scriptURL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+            
+            fetch(scriptURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(resultData)
+                body: JSON.stringify(scoreData)
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    showResults(true);
-                    loadLeaderboard();
-                } else {
-                    console.error('Error saving results:', data.message);
-                    alert('Error saving to Google Sheets: ' + data.message);
-                    showResults(false);
-                }
+                console.log('Score saved to Google Sheets:', data);
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('Error connecting to Google Apps Script. Please check your URL.');
-                showResults(false);
+                console.error('Error saving to Google Sheets:', error);
             });
-        }
-
-        // Mock storage for testing
-        function saveToMockStorage(data) {
-            let mockData = JSON.parse(localStorage.getItem('iqTestResults') || '[]');
-            data.timestamp = new Date().toISOString();
-            mockData.push(data);
-            localStorage.setItem('iqTestResults', JSON.stringify(mockData));
-        }
-
-        function getMockData() {
-            const data = JSON.parse(localStorage.getItem('iqTestResults') || '[]');
-            return data.map((item, index) => ({
-                ...item,
-                id: index + 1,
-                timestamp: new Date(item.timestamp),
-                formattedTime: formatTime(item.timeUsed)
-            }));
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        function skipNameEntry() {
-            showResults(false);
-        }
-
-        function showResults(savedToLeaderboard = false) {
-            document.getElementById('nameInputScreen').style.display = 'none';
-            document.getElementById('results').style.display = 'block';
-            
-            let resultText;
-            if (finalResults.iqScore >= 140) resultText = "Genius Level! 🎯";
-            else if (finalResults.iqScore >= 120) resultText = "Superior Intelligence! 🌟";
-            else if (finalResults.iqScore >= 110) resultText = "Above Average Intelligence! 📈";
-            else if (finalResults.iqScore >= 90) resultText = "Average Intelligence 👍";
-            else resultText = "Below Average - Keep Learning! 📚";
-            
-            document.getElementById('iqScore').textContent = finalResults.iqScore;
-            document.getElementById('resultText').textContent = resultText;
-            document.getElementById('correctAnswers').textContent = finalResults.correctAnswers;
-            document.getElementById('accuracy').textContent = finalResults.accuracy + '%';
-            
-            const minutesUsed = Math.floor(finalResults.timeUsed / 60);
-            const secondsUsed = finalResults.timeUsed % 60;
-            document.getElementById('timeUsed').textContent = 
-                `${minutesUsed}:${secondsUsed.toString().padStart(2, '0')}`;
-            
-            if (savedToLeaderboard) {
-                document.getElementById('leaderboardSection').style.display = 'block';
-                document.getElementById('allResultsSection').style.display = 'block';
-            }
         }
 
         function loadLeaderboard() {
-            const leaderboardList = document.getElementById('leaderboardList');
-            leaderboardList.innerHTML = '<div class="loading">Loading leaderboard...</div>';
+            const leaderboard = JSON.parse(localStorage.getItem('iqTestLeaderboard') || '[]');
+            const leaderboardContainer = document.getElementById('leaderboard');
             
-            if (USE_MOCK_DATA || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
-                // Use mock data
-                setTimeout(() => {
-                    const mockData = getMockData();
-                    const leaderboard = mockData
-                        .sort((a, b) => b.iqScore - a.iqScore)
-                        .slice(0, 10)
-                        .map((item, index) => ({
-                            rank: index + 1,
-                            name: item.name,
-                            iqScore: item.iqScore,
-                            accuracy: item.accuracy,
-                            formattedTime: item.formattedTime
-                        }));
-                    
-                    if (leaderboard.length > 0) {
-                        displayLeaderboard(leaderboard);
-                        loadAllResults();
-                    } else {
-                        leaderboardList.innerHTML = '<div class="loading">No results yet. Be the first!</div>';
-                    }
-                }, 500);
+            if (leaderboard.length === 0) {
+                leaderboardContainer.innerHTML = `
+                    <div class="leaderboard-item">
+                        <span>${currentLanguage === 'en' ? 'No scores yet. Be the first!' : 'තවම ලකුණු නැත. පළමුවන්නා වන්න!'}</span>
+                    </div>
+                `;
                 return;
             }
             
-            fetch(GOOGLE_SCRIPT_URL + '?action=leaderboard')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.data.length > 0) {
-                    displayLeaderboard(data.data);
-                    loadAllResults();
-                } else {
-                    leaderboardList.innerHTML = '<div class="loading">No leaderboard data available</div>';
-                }
-            })
-            .catch(error => {
-                console.error('Error loading leaderboard:', error);
-                leaderboardList.innerHTML = '<div class="loading">Error loading leaderboard</div>';
-            });
-        }
-
-        function loadAllResults() {
-            const allResultsList = document.getElementById('allResultsList');
-            allResultsList.innerHTML = '<div class="loading">Loading all results...</div>';
-            
-            if (USE_MOCK_DATA || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
-                // Use mock data
-                setTimeout(() => {
-                    const mockData = getMockData().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    displayAllResults(mockData);
-                }, 500);
-                return;
-            }
-            
-            fetch(GOOGLE_SCRIPT_URL + '?action=all')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.data.length > 0) {
-                    displayAllResults(data.data);
-                } else {
-                    allResultsList.innerHTML = '<div class="loading">No results data available</div>';
-                }
-            })
-            .catch(error => {
-                console.error('Error loading all results:', error);
-                allResultsList.innerHTML = '<div class="loading">Error loading results</div>';
-            });
-        }
-
-        function displayAllResults(results) {
-            const allResultsList = document.getElementById('allResultsList');
-            const currentUserName = document.getElementById('userName').value.trim();
-            
-            allResultsList.innerHTML = '';
-            
-            // Show first 5 results initially
-            const displayCount = results.length > 5 ? 5 : results.length;
-            
-            for (let i = 0; i < displayCount; i++) {
-                const result = results[i];
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                
-                if (result.name === currentUserName) {
-                    item.classList.add('current-user');
-                }
-                
-                const dateStr = new Date(result.timestamp).toLocaleDateString();
-                
-                item.innerHTML = `
-                    <div class="result-info">
-                        <div class="result-name">${result.name}</div>
-                        <div class="result-details">
-                            ${result.accuracy}% accuracy • ${result.formattedTime || formatTime(result.timeUsed)} • ${dateStr}
-                        </div>
-                    </div>
-                    <div class="result-score">${result.iqScore} IQ</div>
-                `;
-                
-                allResultsList.appendChild(item);
-            }
-            
-            // Show "Show More" button if there are more results
-            if (results.length > 5) {
-                const showMoreBtn = document.createElement('button');
-                showMoreBtn.className = 'button show-all-btn';
-                showMoreBtn.textContent = `Show All ${results.length} Results`;
-                showMoreBtn.onclick = () => showAllResults(results);
-                allResultsList.appendChild(showMoreBtn);
-            }
-        }
-
-        function showAllResults(results) {
-            const allResultsList = document.getElementById('allResultsList');
-            const currentUserName = document.getElementById('userName').value.trim();
-            
-            allResultsList.innerHTML = '';
-            
-            results.forEach(result => {
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                
-                if (result.name === currentUserName) {
-                    item.classList.add('current-user');
-                }
-                
-                const dateStr = new Date(result.timestamp).toLocaleDateString();
-                
-                item.innerHTML = `
-                    <div class="result-info">
-                        <div class="result-name">${result.name}</div>
-                        <div class="result-details">
-                            ${result.accuracy}% accuracy • ${result.formattedTime || formatTime(result.timeUsed)} • ${dateStr}
-                        </div>
-                    </div>
-                    <div class="result-score">${result.iqScore} IQ</div>
-                `;
-                
-                allResultsList.appendChild(item);
-            });
-        }
-
-        function displayLeaderboard(leaderboard) {
-            const leaderboardList = document.getElementById('leaderboardList');
-            const currentUserName = document.getElementById('userName').value.trim();
-            
-            leaderboardList.innerHTML = '';
-            
-            leaderboard.forEach(entry => {
-                const item = document.createElement('div');
-                item.className = 'leaderboard-item';
-                
-                if (entry.name === currentUserName) {
-                    item.classList.add('current-user');
-                }
-                
-                item.innerHTML = `
-                    <span class="leaderboard-rank">#${entry.rank}</span>
-                    <span class="leaderboard-name">${entry.name}</span>
-                    <span class="leaderboard-score">${entry.iqScore} IQ</span>
-                `;
-                
-                leaderboardList.appendChild(item);
-            });
+            leaderboardContainer.innerHTML = leaderboard.map((entry, index) => `
+                <div class="leaderboard-item">
+                    <span>${index + 1}. ${entry.name}</span>
+                    <span>${entry.score} IQ</span>
+                    <span>${entry.date}</span>
+                </div>
+            `).join('');
         }
 
         function shareResult(platform) {
-            const iqScore = finalResults.iqScore;
-            const userName = document.getElementById('userName').value.trim();
-            const nameText = userName ? ` ${userName} scored` : ' I scored';
-            const text = `🧠${nameText} ${iqScore} IQ points! Can you beat this score? Take the test here: `;
+            const score = document.getElementById('final-score').textContent;
+            const level = document.getElementById('iq-level').textContent;
+            
+            const shareText = currentLanguage === 'en' ? 
+                `I just scored ${score} IQ on this amazing IQ test! My level is ${level}. Try it yourself!` :
+                `මම මෙම විශිෂ්ට IQ පරීක්ෂණයෙන් ${score} IQ ලකුණු ලබා ගත්තා! මගේ මට්ටම ${level}. ඔබත් උත්සාහ කරන්න!`;
+            
             const url = window.location.href;
             
-            switch(platform) {
+            let shareURL = '';
+            
+            switch (platform) {
                 case 'facebook':
-                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+                    shareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
                     break;
                 case 'twitter':
-                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text + url)}`, '_blank');
+                    shareURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
                     break;
                 case 'whatsapp':
-                    window.open(`https://wa.me/?text=${encodeURIComponent(text + url)}`, '_blank');
+                    shareURL = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + url)}`;
                     break;
+                case 'linkedin':
+                    shareURL = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                    break;
+            }
+            
+            window.open(shareURL, '_blank', 'width=600,height=400');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            if (screenId === 'leaderboard-screen') {
+                loadLeaderboard();
             }
         }
 
+        function showHome() {
+            showScreen('home-screen');
+        }
+
         function restartTest() {
-            currentQuestion = 0;
-            score = 0;
-            userAnswers = [];
-            timeLeft = 15 * 60;
-            finalResults = {};
+            showScreen('home-screen');
+        }
+
+        function showLeaderboard() {
+            showScreen('leaderboard-screen');
+        }
+
+        // Initialize app when page loads
+        window.onload = init;
+
+        // Prevent cheating by detecting developer tools
+        let devtools = {
+            open: false,
+            orientation: null
+        };
+
+        const threshold = 160;
+
+        setInterval(() => {
+            if (window.outerHeight - window.innerHeight > threshold || 
+                window.outerWidth - window.innerWidth > threshold) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    alert(currentLanguage === 'en' ? 
+                        'Developer tools detected! Please close them to continue.' :
+                        'සංවර්ධක මෙවලම් අනාවරණය විය! ඉදිරියට යාමට ඒවා වසන්න.');
+                }
+            } else {
+                devtools.open = false;
+            }
+        }, 500);
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Disable common keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Add visual feedback for interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.add('pulse');
+                    setTimeout(() => this.classList.remove('pulse'), 200);
+                });
+            });
+        });
+
+        // Add leaderboard button to home screen
+        document.getElementById('home-screen').innerHTML += `
+            <button class="start-btn" onclick="showLeaderboard()" data-en="View Leaderboard" data-si="ලකුණු පුවරුව බලන්න" style="margin-top: 10px;">View Leaderboard</button>
+        `;
+
+        // Mobile-specific optimizations
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            document.body.classList.add('mobile');
             
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('nameInputScreen').style.display = 'none';
-            document.getElementById('introScreen').style.display = 'block';
-            document.getElementById('timer').textContent = 'Time: 15:00';
-            document.getElementById('userName').value = '';
-            document.getElementById('userEmail').value = '';
-            document.getElementById('submitBtn').textContent = 'View Results & Join Leaderboard';
-            document.getElementById('submitBtn').disabled = false;
+            // Prevent zoom on input focus
+            document.addEventListener('touchstart', function() {}, true);
+            
+            // Add touch feedback
+            document.addEventListener('touchstart', function(e) {
+                e.target.classList.add('touch-active');
+            });
+            
+            document.addEventListener('touchend', function(e) {
+                e.target.classList.remove('touch-active');
+            });
         }
     </script>
+
+    <style>
+        .touch-active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
+        }
+
+        .mobile .container {
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .mobile .title {
+            font-size: 1.8em;
+        }
+
+        .mobile .question-container {
+            padding: 20px;
+        }
+
+        .mobile .option {
+            padding: 12px;
+            font-size: 0.9em;
+        }
+
+        .mobile .timer {
+            font-size: 1.2em;
+        }
+
+        .mobile .result-score {
+            font-size: 2.5em;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 1.5em;
+            }
+            
+            .question-text {
+                font-size: 1.1em;
+            }
+            
+            .option {
+                padding: 10px;
+            }
+            
+            .start-btn, .next-btn, .restart-btn {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            }
+            
+            .container {
+                background: rgba(44, 62, 80, 0.95);
+                color: white;
+            }
+            
+            .question-container {
+                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+                color: white;
+            }
+            
+            .option {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+            
+            .leaderboard {
+                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            }
+            
+            .leaderboard-item {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+            }
+        }
+    </style>
 </body>
 </html>
