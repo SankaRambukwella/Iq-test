@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -803,45 +804,75 @@
                 name: playerName,
                 score: iqScore,
                 date: new Date().toLocaleDateString(),
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                language: currentLanguage
             };
             
-            // Save to local storage
-            let leaderboard = JSON.parse(localStorage.getItem('iqTestLeaderboard') || '[]');
-            leaderboard.push(scoreData);
-            leaderboard.sort((a, b) => b.score - a.score);
-            leaderboard = leaderboard.slice(0, 10); // Keep top 10
-            localStorage.setItem('iqTestLeaderboard', JSON.stringify(leaderboard));
+            // Show loading indicator
+            showLoadingMessage();
             
-            // Send to Google Sheets (you'll need to implement the Google Apps Script)
+            // Send to Google Sheets
             sendToGoogleSheets(scoreData);
         }
 
         function sendToGoogleSheets(scoreData) {
             // Google Apps Script Web App URL - Replace with your actual URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyimJp3lFvdFHjRbxbayp4CliMOpSKb7MGt3BJHc_Zg9vEb8cv8wtRiWwzy908cqI4vIA/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzPWwC4TQQIjVhVk31sRiDoPNDXkjn8CvffgJcMJU8KRQ1zPgoWIbKiFPsPZbKicteyFA/exec';
             
             fetch(scriptURL, {
                 method: 'POST',
+                mode: 'no-cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(scoreData)
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Score saved to Google Sheets:', data);
+            .then(() => {
+                console.log('Score saved to Google Sheets successfully');
+                hideLoadingMessage();
+                loadLeaderboard(); // Refresh leaderboard
+                showSuccessMessage();
             })
             .catch(error => {
                 console.error('Error saving to Google Sheets:', error);
+                hideLoadingMessage();
+                showErrorMessage();
             });
         }
 
         function loadLeaderboard() {
-            const leaderboard = JSON.parse(localStorage.getItem('iqTestLeaderboard') || '[]');
             const leaderboardContainer = document.getElementById('leaderboard');
             
-            if (leaderboard.length === 0) {
+            // Show loading indicator
+            leaderboardContainer.innerHTML = `
+                <div class="leaderboard-item">
+                    <span class="loading"></span>
+                    <span>${currentLanguage === 'en' ? 'Loading scores...' : 'ලකුණු පූරණය වේ...'}</span>
+                </div>
+            `;
+            
+            // Google Apps Script Web App URL for reading data
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzPWwC4TQQIjVhVk31sRiDoPNDXkjn8CvffgJcMJU8KRQ1zPgoWIbKiFPsPZbKicteyFA/exec';
+            
+            fetch(scriptURL + '?action=getLeaderboard', {
+                method: 'GET',
+                mode: 'no-cors'
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayLeaderboard(data.scores || []);
+            })
+            .catch(error => {
+                console.error('Error loading leaderboard:', error);
+                // Fallback to show empty leaderboard
+                displayLeaderboard([]);
+            });
+        }
+
+        function displayLeaderboard(scores) {
+            const leaderboardContainer = document.getElementById('leaderboard');
+            
+            if (scores.length === 0) {
                 leaderboardContainer.innerHTML = `
                     <div class="leaderboard-item">
                         <span>${currentLanguage === 'en' ? 'No scores yet. Be the first!' : 'තවම ලකුණු නැත. පළමුවන්නා වන්න!'}</span>
@@ -850,13 +881,62 @@
                 return;
             }
             
-            leaderboardContainer.innerHTML = leaderboard.map((entry, index) => `
+            // Sort scores by IQ score (highest first)
+            scores.sort((a, b) => b.score - a.score);
+            
+            leaderboardContainer.innerHTML = scores.slice(0, 10).map((entry, index) => `
                 <div class="leaderboard-item">
                     <span>${index + 1}. ${entry.name}</span>
                     <span>${entry.score} IQ</span>
                     <span>${entry.date}</span>
                 </div>
             `).join('');
+        }
+
+        function showLoadingMessage() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loading-message';
+            loadingDiv.innerHTML = `
+                <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                            background: rgba(0,0,0,0.8); color: white; padding: 20px; border-radius: 10px; z-index: 9999;">
+                    <div class="loading" style="margin-right: 10px;"></div>
+                    <span>${currentLanguage === 'en' ? 'Saving your score...' : 'ඔබේ ලකුණු සුරකිමින්...'}</span>
+                </div>
+            `;
+            document.body.appendChild(loadingDiv);
+        }
+
+        function hideLoadingMessage() {
+            const loadingDiv = document.getElementById('loading-message');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+
+        function showSuccessMessage() {
+            const successDiv = document.createElement('div');
+            successDiv.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; 
+                            background: linear-gradient(45deg, #4CAF50, #45a049); color: white; 
+                            padding: 15px 20px; border-radius: 10px; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <span>${currentLanguage === 'en' ? '✓ Score saved successfully!' : '✓ ලකුණු සාර්ථකව සුරකින ලදී!'}</span>
+                </div>
+            `;
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+        }
+
+        function showErrorMessage() {
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; 
+                            background: linear-gradient(45deg, #f44336, #d32f2f); color: white; 
+                            padding: 15px 20px; border-radius: 10px; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <span>${currentLanguage === 'en' ? '⚠ Error saving score. Please try again.' : '⚠ ලකුණු සුරකීමේ දෝෂයකි. නැවත උත්සාහ කරන්න.'}</span>
+                </div>
+            `;
+            document.body.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
         }
 
         function shareResult(platform) {
