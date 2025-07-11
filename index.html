@@ -422,210 +422,301 @@
         let selectedAnswer = null;
         let startTime;
 
-      // Advanced IQ Test Questions Database
+     // Enhanced IQ Test Questions Database with Symbolic and Varied Questions
 const questions = {
     en: [
+        // Mathematical Reasoning
         {
-            question: "What is 25% of 80?",
-            options: ["15", "20", "25", "30"],
-            correct: 1
+            question: "What is 15% of 240?",
+            options: ["30", "36", "40", "45"],
+            correct: 1,
+            category: "mathematical"
         },
         {
-            question: "If all roses are flowers and some flowers are red, which statement is true?",
-            options: ["All roses are red", "Some roses might be red", "No roses are red", "All flowers are roses"],
-            correct: 1
+            question: "If 3x + 7 = 22, what is the value of x?",
+            options: ["3", "5", "7", "9"],
+            correct: 1,
+            category: "mathematical"
         },
         {
-            question: "Complete the pattern: 1, 4, 9, 16, 25, ?",
-            options: ["30", "35", "36", "49"],
-            correct: 2
+            question: "Complete the series: 3, 7, 15, 31, 63, ?",
+            options: ["95", "127", "159", "191"],
+            correct: 1,
+            category: "mathematical"
+        },
+        
+        // Logical Reasoning
+        {
+            question: "If all birds can fly and penguins are birds, but penguins cannot fly, what can we conclude?",
+            options: ["The first statement is false", "Penguins are not birds", "Both statements can be true", "Logic is contradictory"],
+            correct: 0,
+            category: "logical"
         },
         {
-            question: "Which word doesn't belong: Cat, Dog, Bird, Fish, Table",
-            options: ["Cat", "Dog", "Bird", "Table"],
-            correct: 3
+            question: "In a group of 30 people, 18 like tea, 16 like coffee, and 8 like both. How many like neither?",
+            options: ["2", "4", "6", "8"],
+            correct: 1,
+            category: "logical"
+        },
+        
+        // Symbolic Pattern Recognition
+        {
+            question: "What comes next in this pattern: ○●○○●○○○●○○○○●?",
+            options: ["○○○○○●", "○○○○●", "●○○○○", "○●○○○"],
+            correct: 0,
+            category: "symbolic"
         },
         {
-            question: "What comes next: A, C, F, J, O, ?",
-            options: ["S", "T", "U", "V"],
-            correct: 2
+            question: "Which symbol completes the pattern: △□○ △□? △□●",
+            options: ["○", "●", "△", "□"],
+            correct: 1,
+            category: "symbolic"
         },
         {
-            question: "What is the square root of 144?",
-            options: ["11", "12", "13", "14"],
-            correct: 1
+            question: "If ★ = 5, ♦ = 3, ♠ = 7, then ★ + ♦ × ♠ = ?",
+            options: ["26", "56", "40", "31"],
+            correct: 0,
+            category: "symbolic"
         },
         {
-            question: "What comes next in the sequence: 2, 4, 8, 16, ?",
-            options: ["24", "32", "20", "28"],
-            correct: 1
+            question: "Complete the pattern: ◐◑◒◓◐◑◒?",
+            options: ["◐", "◑", "◒", "◓"],
+            correct: 3,
+            category: "symbolic"
+        },
+        
+        // Spatial Reasoning
+        {
+            question: "How many triangles are in this figure: ▲ with internal lines creating smaller triangles (imagine a triangle divided into 4 smaller triangles)?",
+            options: ["4", "6", "8", "13"],
+            correct: 3,
+            category: "spatial"
         },
         {
-            question: "If a clock shows 3:15, what is the angle between the hour and minute hands?",
-            options: ["0°", "7.5°", "15°", "22.5°"],
-            correct: 1
+            question: "If you fold a square paper in half twice and cut one corner, how many holes will you have when unfolded?",
+            options: ["1", "2", "4", "8"],
+            correct: 2,
+            category: "spatial"
+        },
+        
+        // Analogical Reasoning
+        {
+            question: "Ocean is to Water as Library is to:",
+            options: ["Books", "Knowledge", "Reading", "Silence"],
+            correct: 0,
+            category: "analogical"
         },
         {
-            question: "Complete the analogy: Book is to Reading as Fork is to:",
-            options: ["Eating", "Cooking", "Kitchen", "Spoon"],
-            correct: 0
+            question: "Thermometer is to Temperature as Barometer is to:",
+            options: ["Weather", "Pressure", "Wind", "Rain"],
+            correct: 1,
+            category: "analogical"
+        },
+        
+        // Verbal/Linguistic
+        {
+            question: "Which word can be made from the letters of ASTRONOMY?",
+            options: ["STRONG", "ROMANS", "MAYORS", "STREAM"],
+            correct: 2,
+            category: "verbal"
         },
         {
-            question: "Which number is different: 2, 4, 6, 8, 9, 10?",
-            options: ["2", "4", "9", "10"],
-            correct: 2
+            question: "What is the odd one out: RUSH, PUSH, BUSH, HUSH, CASH?",
+            options: ["RUSH", "PUSH", "BUSH", "CASH"],
+            correct: 3,
+            category: "verbal"
+        },
+        
+        // Number Series
+        {
+            question: "What comes next: 1, 8, 27, 64, 125, ?",
+            options: ["196", "216", "256", "343"],
+            correct: 1,
+            category: "numerical"
         },
         {
-            question: "What is 7 × 8 × 0 × 5?",
-            options: ["280", "0", "35", "40"],
-            correct: 1
+            question: "Find the missing number: 2, 6, 12, 20, 30, ?",
+            options: ["40", "42", "45", "48"],
+            correct: 1,
+            category: "numerical"
+        },
+        
+        // Matrix Reasoning
+        {
+            question: "In a 3×3 grid where each row and column must contain symbols ○, △, □ exactly once, if the top row is ○△□ and middle row starts with △, what comes next in the middle row?",
+            options: ["○□", "□○", "△○", "○△"],
+            correct: 1,
+            category: "matrix"
+        },
+        
+        // Abstract Reasoning
+        {
+            question: "If ↑ means +2, ↓ means -1, → means ×3, what is the result of: 5 ↑ ↓ →?",
+            options: ["18", "21", "24", "15"],
+            correct: 0,
+            category: "abstract"
+        },
+        
+        // Complex Logic
+        {
+            question: "In a race, Anna finished before Bob but after Carol. David finished before Anna but after Eve. Who finished first?",
+            options: ["Anna", "Bob", "Carol", "Eve"],
+            correct: 2,
+            category: "logical"
         },
         {
-            question: "What is the missing number: 1, 1, 2, 3, 5, 8, ?",
-            options: ["11", "13", "15", "10"],
-            correct: 1
-        },
-        {
-            question: "Which shape has the most sides: Triangle, Square, Pentagon, Hexagon?",
-            options: ["Triangle", "Square", "Pentagon", "Hexagon"],
-            correct: 3
-        },
-        {
-            question: "If today is Monday, what day will it be in 100 days?",
-            options: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-            correct: 1
-        },
-        {
-            question: "If you rearrange the letters 'CIFAIPC', you get the name of a/an:",
-            options: ["Country", "Animal", "Ocean", "City"],
-            correct: 2
-        },
-        {
-            question: "Which number should replace the question mark: 3, 6, 12, 24, ?",
-            options: ["36", "48", "42", "30"],
-            correct: 1
-        },
-        {
-            question: "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?",
-            options: ["100 minutes", "20 minutes", "5 minutes", "1 minute"],
-            correct: 2
-        },
-        {
-            question: "If you have 3 apples and you take away 2, how many do you have?",
-            options: ["1", "2", "3", "0"],
-            correct: 1
-        },
-        {
-            question: "Complete: Water is to Ice as Milk is to:",
-            options: ["Cream", "Butter", "Cheese", "Yogurt"],
-            correct: 2
-        },
-        {
-            question: "What is the next prime number after 17?",
-            options: ["18", "19", "20", "21"],
-            correct: 1
+            question: "If it's not true that 'all cats are black', which of these must be true?",
+            options: ["No cats are black", "Some cats are not black", "All cats are not black", "Some cats are black"],
+            correct: 1,
+            category: "logical"
         }
     ],
+    
     si: [
+        // Mathematical Reasoning
         {
-            question: "80 හි 25% කීයද?",
-            options: ["15", "20", "25", "30"],
-            correct: 1
+            question: "240 හි 15% කීයද?",
+            options: ["30", "36", "40", "45"],
+            correct: 1,
+            category: "mathematical"
         },
         {
-            question: "සියලු රෝස මල් වන අතර සමහර මල් රතු නම්, සත්‍ය ප්‍රකාශනය කුමක්ද?",
-            options: ["සියලු රෝස රතු ය", "සමහර රෝස රතු විය හැක", "කිසිදු රෝසයක් රතු නැත", "සියලු මල් රෝස ය"],
-            correct: 1
+            question: "3x + 7 = 22 නම්, x හි අගය කුමක්ද?",
+            options: ["3", "5", "7", "9"],
+            correct: 1,
+            category: "mathematical"
         },
         {
-            question: "රටාව සම්පූර්ණ කරන්න: 1, 4, 9, 16, 25, ?",
-            options: ["30", "35", "36", "49"],
-            correct: 2
+            question: "ශ්‍රේණිය සම්පූර්ණ කරන්න: 3, 7, 15, 31, 63, ?",
+            options: ["95", "127", "159", "191"],
+            correct: 1,
+            category: "mathematical"
+        },
+        
+        // Logical Reasoning
+        {
+            question: "සියලු පක්ෂීන්ට පියාසර කළ හැකි අතර පෙන්ගුයින් පක්ෂීන් වන නමුත් පෙන්ගුයින්ට පියාසර කළ නොහැකි නම්, අපට නිගමනය කළ හැක්කේ කුමක්ද?",
+            options: ["පළමු ප්‍රකාශනය වැරදිය", "පෙන්ගුයින් පක්ෂීන් නොවේ", "ප්‍රකාශන දෙකම සත්‍ය විය හැක", "තර්කය පරස්පර වේ"],
+            correct: 0,
+            category: "logical"
         },
         {
-            question: "කුමන වචනය අනෙක් ඒවාට අයත් නොවේද: බළලා, බල්ලා, කුරුල්ලා, මාළුවා, මේසය",
-            options: ["බළලා", "බල්ලා", "කුරුල්ලා", "මේසය"],
-            correct: 3
+            question: "30 දෙනෙකුගෙන් යුත් කණ්ඩායමක, 18 දෙනෙකු තේ කැමති, 16 දෙනෙකු කෝපි කැමති, 8 දෙනෙකු දෙකම කැමති. කිසිවක් නොකැමති කීදෙනෙකු?",
+            options: ["2", "4", "6", "8"],
+            correct: 1,
+            category: "logical"
+        },
+        
+        // Symbolic Pattern Recognition
+        {
+            question: "මෙම රටාවේ මීළඟ කොටස: ○●○○●○○○●○○○○●?",
+            options: ["○○○○○●", "○○○○●", "●○○○○", "○●○○○"],
+            correct: 0,
+            category: "symbolic"
         },
         {
-            question: "මීළඟ අකුර: A, C, F, J, O, ?",
-            options: ["S", "T", "U", "V"],
-            correct: 2
+            question: "රටාව සම්පූර්ණ කරන සංකේතය: △□○ △□? △□●",
+            options: ["○", "●", "△", "□"],
+            correct: 1,
+            category: "symbolic"
         },
         {
-            question: "144 හි වර්ග මූලය කුමක්ද?",
-            options: ["11", "12", "13", "14"],
-            correct: 1
+            question: "★ = 5, ♦ = 3, ♠ = 7 නම්, ★ + ♦ × ♠ = ?",
+            options: ["26", "56", "40", "31"],
+            correct: 0,
+            category: "symbolic"
         },
         {
-            question: "අනුක්‍රමයේ මීළඟ සංඛ්‍යාව කුමක්ද: 2, 4, 8, 16, ?",
-            options: ["24", "32", "20", "28"],
-            correct: 1
+            question: "රටාව සම්පූර්ණ කරන්න: ◐◑◒◓◐◑◒?",
+            options: ["◐", "◑", "◒", "◓"],
+            correct: 3,
+            category: "symbolic"
+        },
+        
+        // Spatial Reasoning
+        {
+            question: "මෙම රූපයේ ත්‍රිකෝණ කීයක් ද: ▲ කුඩා ත්‍රිකෝණ 4කට බෙදා ඇති විශාල ත්‍රිකෝණයක්?",
+            options: ["4", "6", "8", "13"],
+            correct: 3,
+            category: "spatial"
         },
         {
-            question: "ඔරලෝසුවක 3:15 පෙන්වන්නේ නම්, කාල සහ මිනිත්තු ඉඳිකටුවේ කෝණය?",
-            options: ["0°", "7.5°", "15°", "22.5°"],
-            correct: 1
+            question: "චතුරස්‍ර කඩදාසියක් දෙවරක් නැවී එක් කෙළවරක් කැපුවහොත්, දිගහරින්නේ විට සිදුරු කීයක් ඇතිවේද?",
+            options: ["1", "2", "4", "8"],
+            correct: 2,
+            category: "spatial"
+        },
+        
+        // Analogical Reasoning
+        {
+            question: "සාගරය වතුරට යම් සේ පුස්තකාලය කුමකට ද:",
+            options: ["පොත්", "දැනුම", "කියවීම", "නිහඬතාව"],
+            correct: 0,
+            category: "analogical"
         },
         {
-            question: "සාදෘශ්‍යය සම්පූර්ණ කරන්න: පොත කියවීමට යම් සේ දෙබලක කුමකට ද:",
-            options: ["කෑමට", "උයන්න", "කුස්සියට", "හැන්දකට"],
-            correct: 0
+            question: "උෂ්ණත්වමානය උෂ්ණත්වයට යම් සේ වායුමානය කුමකට ද:",
+            options: ["කාලගුණය", "පීඩනය", "සුළඟ", "වර්ෂාව"],
+            correct: 1,
+            category: "analogical"
+        },
+        
+        // Verbal/Linguistic
+        {
+            question: "ASTRONOMY අකුරුවලින් හැදිය හැකි වචනය:",
+            options: ["STRONG", "ROMANS", "MAYORS", "STREAM"],
+            correct: 2,
+            category: "verbal"
         },
         {
-            question: "වෙනස් සංඛ්‍යාව: 2, 4, 6, 8, 9, 10?",
-            options: ["2", "4", "9", "10"],
-            correct: 2
+            question: "වෙනස්ම වචනය: RUSH, PUSH, BUSH, HUSH, CASH?",
+            options: ["RUSH", "PUSH", "BUSH", "CASH"],
+            correct: 3,
+            category: "verbal"
+        },
+        
+        // Number Series
+        {
+            question: "මීළඟ සංඛ්‍යාව: 1, 8, 27, 64, 125, ?",
+            options: ["196", "216", "256", "343"],
+            correct: 1,
+            category: "numerical"
         },
         {
-            question: "7 × 8 × 0 × 5 = ?",
-            options: ["280", "0", "35", "40"],
-            correct: 1
+            question: "අස්ථානගත සංඛ්‍යාව: 2, 6, 12, 20, 30, ?",
+            options: ["40", "42", "45", "48"],
+            correct: 1,
+            category: "numerical"
+        },
+        
+        // Matrix Reasoning
+        {
+            question: "3×3 ජාලකයක සෑම පේළියකම සෑම තීරයකම ○, △, □ එක් වරක් තිබිය යුතු නම්, ඉහළ පේළිය ○△□ සහ මැද පේළිය △ ගින් ආරම්භ වන්නේ නම්, මැද පේළියේ මීළඟ කොටස?",
+            options: ["○□", "□○", "△○", "○△"],
+            correct: 1,
+            category: "matrix"
+        },
+        
+        // Abstract Reasoning
+        {
+            question: "↑ යන්නෙන් +2, ↓ යන්නෙන් -1, → යන්නෙන් ×3 අදහස් වන්නේ නම්: 5 ↑ ↓ → හි ප්‍රතිඵලය?",
+            options: ["18", "21", "24", "15"],
+            correct: 0,
+            category: "abstract"
+        },
+        
+        // Complex Logic
+        {
+            question: "ධාවන තරඟයකදී, අන්නා බොබ්ට වඩා පෙර නමුත් කැරොල්ට පසුව අවසන් කළාය. ඩේවිඩ් අන්නාට පෙර නමුත් ඊව්ට පසුව අවසන් කළාය. පළමුව කවුද?",
+            options: ["අන්නා", "බොබ්", "කැරොල්", "ඊව්"],
+            correct: 2,
+            category: "logical"
         },
         {
-            question: "අස්ථානගත සංඛ්‍යාව කුමක්ද: 1, 1, 2, 3, 5, 8, ?",
-            options: ["11", "13", "15", "10"],
-            correct: 1
-        },
-        {
-            question: "වැඩිම පැති ප්‍රමාණය ඇති හැඩය: ත්‍රිකෝණය, චතුරස්‍රය, පංචකෝණය, ෂඩ්කෝණය?",
-            options: ["ත්‍රිකෝණය", "චතුරස්‍රය", "පංචකෝණය", "ෂඩ්කෝණය"],
-            correct: 3
-        },
-        {
-            question: "අද සඳුදා නම්, දින 100කින් කුමන දිනයක් වේද?",
-            options: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා"],
-            correct: 1
-        },
-        {
-            question: "'CIFAIPC' අකුරු නැවත සකසන්නේ නම් ලැබෙන්නේ:",
-            options: ["රටක නම", "සතෙකුගේ නම", "සාගරයක නම", "නගරයක නම"],
-            correct: 2
-        },
-        {
-            question: "ප්‍රශ්න ලකුණ වෙනුවට එන සංඛ්‍යාව: 3, 6, 12, 24, ?",
-            options: ["36", "48", "42", "30"],
-            correct: 1
-        },
-        {
-            question: "යන්ත්‍ර 5ක් විනාඩි 5කින් කෑලි 5ක් හැදුවහොත්, යන්ත්‍ර 100ක් කෑලි 100ක් හැදීමට කාලය?",
-            options: ["විනාඩි 100", "විනාඩි 20", "විනාඩි 5", "විනාඩි 1"],
-            correct: 2
-        },
-        {
-            question: "ඔබ අසුරන්නතේ 3ක් තිබී 2ක් ගත්තහොත්, ඔබ සතුව කීයක් තිබේද?",
-            options: ["1", "2", "3", "0"],
-            correct: 1
-        },
-        {
-            question: "සම්පූර්ණ කරන්න: වතුර අයිස්වලට යම් සේ කිරි කුමකට ද:",
-            options: ["ක්‍රීම්", "බටර්", "චීස්", "දමුරු"],
-            correct: 2
-        },
-        {
-            question: "17 ට පසු මීළඟ ප්‍රාථමික සංඛ්‍යාව?",
-            options: ["18", "19", "20", "21"],
-            correct: 1
+            question: "'සියලු බළලුන් කළු ය' යන්න සත්‍ය නොවන්නේ නම්, මෙයින් සත්‍ය විය යුත්තේ කුමක්ද?",
+            options: ["කිසිදු බළලෙකු කළු නැත", "සමහර බළලුන් කළු නොවේ", "සියලු බළලුන් කළු නොවේ", "සමහර බළලුන් කළු ය"],
+            correct: 1,
+            category: "logical"
         }
     ]
 };
