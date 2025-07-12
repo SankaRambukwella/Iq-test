@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IQ Test Challenge</title>
+    <title>IQ Test Challenge - Enhanced</title>
     <style>
         * {
             margin: 0;
@@ -17,9 +16,39 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 10px;
+        }
+
+        /* Advertisement Spaces */
+        .ad-banner {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 728px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .ad-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #3742fa, #2f3542);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
 
         .container {
@@ -49,6 +78,11 @@
         @keyframes shine {
             0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
             100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .header {
@@ -115,7 +149,79 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .start-btn, .next-btn, .restart-btn, .share-btn {
+        .password-input {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.1em;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .set-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .set-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .set-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .set-card.selected {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .set-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .set-description {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .set-difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .difficulty-easy { background: #2ecc71; color: white; }
+        .difficulty-medium { background: #f39c12; color: white; }
+        .difficulty-hard { background: #e74c3c; color: white; }
+        .difficulty-expert { background: #9b59b6; color: white; }
+        .difficulty-genius { background: #34495e; color: white; }
+
+        .start-btn, .next-btn, .restart-btn, .share-btn, .unlock-btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
@@ -129,7 +235,7 @@
             margin: 10px;
         }
 
-        .start-btn:hover, .next-btn:hover, .restart-btn:hover, .share-btn:hover {
+        .start-btn:hover, .next-btn:hover, .restart-btn:hover, .share-btn:hover, .unlock-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
         }
@@ -270,21 +376,10 @@
             min-width: 120px;
         }
 
-        .share-btn.facebook {
-            background: #3b5998;
-        }
-
-        .share-btn.twitter {
-            background: #1da1f2;
-        }
-
-        .share-btn.whatsapp {
-            background: #25d366;
-        }
-
-        .share-btn.linkedin {
-            background: #0077b5;
-        }
+        .share-btn.facebook { background: #3b5998; }
+        .share-btn.twitter { background: #1da1f2; }
+        .share-btn.whatsapp { background: #25d366; }
+        .share-btn.linkedin { background: #0077b5; }
 
         .copyright {
             position: fixed;
@@ -296,6 +391,34 @@
             border-radius: 15px;
             font-size: 0.8em;
             z-index: 1000;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #e74c3c;
+        }
+
+        .locked-set {
+            opacity: 0.5;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .locked-set::after {
+            content: '🔒';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
         }
 
         /* Mobile Optimizations */
@@ -313,6 +436,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .set-selection {
+                grid-template-columns: 1fr;
+            }
+
             .share-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -327,29 +454,68 @@
                 padding: 8px 16px;
                 font-size: 0.9em;
             }
-        }
 
-        .pulse {
-            animation: pulse 2s infinite;
-        }
+            .ad-sidebar {
+                display: none;
+            }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            .ad-banner {
+                font-size: 0.9em;
+                padding: 10px;
+            }
         }
 
         .disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .set-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.8em;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
+    <!-- Top Advertisement Banner -->
+    <div class="ad-banner">
+        <strong>🎯 Premium IQ Training Available!</strong> - Chathura Mahaarachchi,Ashen Abeyrathne!
+    </div>
+
+    <!-- Side Advertisement -->
+    <div class="ad-sidebar">
+        <h3>🧠 Brain Training</h3>
+        <p>කම්කරු නිලධාරී, නව පංති ආරම්භය- ජූලි  09 බදාදා -අශේන් අබේරත්න,චතුර මහාරච්චි - 0719000784,0716247695</p>
+        <button style="background: #fff; color: #3742fa; border: none; padding: 8px 16px; border-radius: 5px; margin-top: 10px; cursor: pointer;">Learn More</button>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1 class="title">IQ Test Challenge</h1>
-            <p class="subtitle">Test Your Intelligence</p>
+            <p class="subtitle">Test Your Intelligence - 4 Difficulty Levels</p>
             
             <div class="lang-switch">
                 <button class="lang-btn active" onclick="switchLanguage('en')">English</button>
@@ -357,13 +523,32 @@
             </div>
         </div>
 
-        <!-- Home Screen -->
-        <div class="screen active" id="home-screen">
+        <!-- Password Screen -->
+        <div class="screen active" id="password-screen">
             <div class="question-container">
-                <h2 data-en="Welcome to the IQ Test!" data-si="IQ පරීක්ෂණයට සාදරයෙන් පිළිගනිමු!">Welcome to the IQ Test!</h2>
-                <p data-en="Test your intelligence with 20 challenging questions. You'll have 30 seconds per question." data-si="ප්‍රශ්න 20කින් ඔබේ බුද්ධිමත්භාවය පරීක්ෂා කරන්න. එක් ප්‍රශ්නයකට තත්පර 30ක් ලැබේ.">Test your intelligence with 20 challenging questions. You'll have 30 seconds per question.</p>
+                <h2 data-en="Enter Access Code" data-si="ප්‍රවේශ කේතය ඇතුළත් කරන්න">Enter Access Code</h2>
+                <p data-en="Please enter the password to access the full IQ test with all difficulty levels." data-si="සියලුම අමාරුත්ව මට්ටම් සහිත සම්පූර්ණ IQ පරීක්ෂණයට ප්‍රවේශ වීමට මුරපදය ඇතුළත් කරන්න.">Please enter the password to access the full IQ test with all difficulty levels.</p>
+                
+                <input type="password" class="password-input" id="password-input" placeholder="Enter password" maxlength="20">
+                <div class="error-message" id="password-error" style="display: none;"></div>
+                
+                <button class="unlock-btn" onclick="checkPassword()" data-en="Unlock Test" data-si="පරීක්ෂණය අගුළු අරින්න">Unlock Test</button>
             </div>
-            <button class="start-btn" onclick="startTest()" data-en="Start Test" data-si="පරීක්ෂණය ආරම්භ කරන්න">Start Test</button>
+        </div>
+
+        <!-- Set Selection Screen -->
+        <div class="screen" id="set-selection-screen">
+            <div class="question-container">
+                <h2 data-en="Choose Your Challenge" data-si="ඔබේ අභියෝගය තෝරන්න">Choose Your Challenge</h2>
+                <p data-en="Select a difficulty level to test your intelligence. Each set contains 20 unique questions." data-si="ඔබේ බුද්ධිය පරීක්ෂා කිරීමට අමාරුත්ව මට්ටමක් තෝරන්න. එක් කට්ටලයක ප්‍රශ්න 20ක් තිබේ.">Select a difficulty level to test your intelligence. Each set contains 20 unique questions.</p>
+            </div>
+            
+            <div class="set-selection" id="set-selection">
+                <!-- Sets will be populated by JavaScript -->
+            </div>
+            
+            <button class="start-btn" onclick="startTest()" data-en="Start Selected Test" data-si="තෝරාගත් පරීක්ෂණය ආරම්භ කරන්න">Start Selected Test</button>
+            <button class="restart-btn" onclick="showLeaderboard()" data-en="View Leaderboard" data-si="ලීඩර්බෝඩ් බලන්න">View Leaderboard</button>
         </div>
 
         <!-- Test Screen -->
@@ -388,6 +573,16 @@
                 <h2 data-en="Your Results" data-si="ඔබේ ප්‍රතිඵල">Your Results</h2>
                 <div class="result-score" id="final-score">0</div>
                 <div class="iq-level" id="iq-level"></div>
+                <div class="set-stats">
+                    <div class="stat-item">
+                        <span data-en="Set:" data-si="කට්ටලය:">Set:</span>
+                        <span id="completed-set"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span data-en="Time:" data-si="කාලය:">Time:</span>
+                        <span id="total-time"></span>
+                    </div>
+                </div>
                 <p id="result-description"></p>
             </div>
             
@@ -398,22 +593,29 @@
                 <button class="share-btn linkedin" onclick="shareResult('linkedin')" data-en="Share on LinkedIn" data-si="LinkedIn හි බෙදාගන්න">Share on LinkedIn</button>
             </div>
             
-            <button class="restart-btn" onclick="restartTest()" data-en="Take Test Again" data-si="නැවත පරීක්ෂණය කරන්න">Take Test Again</button>
+            <button class="restart-btn" onclick="showSetSelection()" data-en="Choose Another Set" data-si="වෙනත් කට්ටලයක් තෝරන්න">Choose Another Set</button>
+            <button class="share-btn" onclick="showLeaderboard()" data-en="View Leaderboard" data-si="ලීඩර්බෝඩ් බලන්න">View Leaderboard</button>
         </div>
 
         <!-- Leaderboard Screen -->
         <div class="screen" id="leaderboard-screen">
             <h2 data-en="Top Scores" data-si="ඉහළම ලකුණු">Top Scores</h2>
             <div class="leaderboard" id="leaderboard"></div>
-            <button class="restart-btn" onclick="showHome()" data-en="Back to Home" data-si="මුල් පිටුවට">Back to Home</button>
+            <button class="restart-btn" onclick="showSetSelection()" data-en="Back to Sets" data-si="කට්ටල වෙත">Back to Sets</button>
         </div>
+    </div>
+
+    <!-- Bottom Advertisement Banner -->
+    <div class="ad-banner">
+        <strong>🎓 Cognitive Enhancement Programs</strong> - Professional IQ Training | 30-Day Money Back Guarantee
     </div>
 
     <div class="copyright">
         © 2025 Developed by Sanka Rambukwella
     </div>
-
+ 
     <script>
+        // Complete JavaScript code for IQ Test Application
         let currentLanguage = 'en';
         let currentQuestion = 0;
         let score = 0;
@@ -421,310 +623,974 @@
         let timer;
         let selectedAnswer = null;
         let startTime;
+        let currentSet = null;
+        let isUnlocked = false;
 
-     // Enhanced IQ Test Questions Database with Symbolic and Varied Questions
-const questions = {
-    en: [
-        // Mathematical Reasoning
-        {
-            question: "What is 15% of 240?",
-            options: ["30", "36", "40", "45"],
-            correct: 1,
-            category: "mathematical"
-        },
-        {
-            question: "If 3x + 7 = 22, what is the value of x?",
-            options: ["3", "5", "7", "9"],
-            correct: 1,
-            category: "mathematical"
-        },
-        {
-            question: "Complete the series: 3, 7, 15, 31, 63, ?",
-            options: ["95", "127", "159", "191"],
-            correct: 1,
-            category: "mathematical"
-        },
-        
-        // Logical Reasoning
-        {
-            question: "If all birds can fly and penguins are birds, but penguins cannot fly, what can we conclude?",
-            options: ["The first statement is false", "Penguins are not birds", "Both statements can be true", "Logic is contradictory"],
-            correct: 0,
-            category: "logical"
-        },
-        {
-            question: "In a group of 30 people, 18 like tea, 16 like coffee, and 8 like both. How many like neither?",
-            options: ["2", "4", "6", "8"],
-            correct: 1,
-            category: "logical"
-        },
-        
-        // Symbolic Pattern Recognition
-        {
-            question: "What comes next in this pattern: ○●○○●○○○●○○○○●?",
-            options: ["○○○○○●", "○○○○●", "●○○○○", "○●○○○"],
-            correct: 0,
-            category: "symbolic"
-        },
-        {
-            question: "Which symbol completes the pattern: △□○ △□? △□●",
-            options: ["○", "●", "△", "□"],
-            correct: 1,
-            category: "symbolic"
-        },
-        {
-            question: "If ★ = 5, ♦ = 3, ♠ = 7, then ★ + ♦ × ♠ = ?",
-            options: ["26", "56", "40", "31"],
-            correct: 0,
-            category: "symbolic"
-        },
-        {
-            question: "Complete the pattern: ◐◑◒◓◐◑◒?",
-            options: ["◐", "◑", "◒", "◓"],
-            correct: 3,
-            category: "symbolic"
-        },
-        
-        // Spatial Reasoning
-        {
-            question: "How many triangles are in this figure: ▲ with internal lines creating smaller triangles (imagine a triangle divided into 4 smaller triangles)?",
-            options: ["4", "6", "8", "13"],
-            correct: 3,
-            category: "spatial"
-        },
-        {
-            question: "If you fold a square paper in half twice and cut one corner, how many holes will you have when unfolded?",
-            options: ["1", "2", "4", "8"],
-            correct: 2,
-            category: "spatial"
-        },
-        
-        // Analogical Reasoning
-        {
-            question: "Ocean is to Water as Library is to:",
-            options: ["Books", "Knowledge", "Reading", "Silence"],
-            correct: 0,
-            category: "analogical"
-        },
-        {
-            question: "Thermometer is to Temperature as Barometer is to:",
-            options: ["Weather", "Pressure", "Wind", "Rain"],
-            correct: 1,
-            category: "analogical"
-        },
-        
-        // Verbal/Linguistic
-        {
-            question: "Which word can be made from the letters of ASTRONOMY?",
-            options: ["STRONG", "ROMANS", "MAYORS", "STREAM"],
-            correct: 2,
-            category: "verbal"
-        },
-        {
-            question: "What is the odd one out: RUSH, PUSH, BUSH, HUSH, CASH?",
-            options: ["RUSH", "PUSH", "BUSH", "CASH"],
-            correct: 3,
-            category: "verbal"
-        },
-        
-        // Number Series
-        {
-            question: "What comes next: 1, 8, 27, 64, 125, ?",
-            options: ["196", "216", "256", "343"],
-            correct: 1,
-            category: "numerical"
-        },
-        {
-            question: "Find the missing number: 2, 6, 12, 20, 30, ?",
-            options: ["40", "42", "45", "48"],
-            correct: 1,
-            category: "numerical"
-        },
-        
-        // Matrix Reasoning
-        {
-            question: "In a 3×3 grid where each row and column must contain symbols ○, △, □ exactly once, if the top row is ○△□ and middle row starts with △, what comes next in the middle row?",
-            options: ["○□", "□○", "△○", "○△"],
-            correct: 1,
-            category: "matrix"
-        },
-        
-        // Abstract Reasoning
-        {
-            question: "If ↑ means +2, ↓ means -1, → means ×3, what is the result of: 5 ↑ ↓ →?",
-            options: ["18", "21", "24", "15"],
-            correct: 0,
-            category: "abstract"
-        },
-        
-        // Complex Logic
-        {
-            question: "In a race, Anna finished before Bob but after Carol. David finished before Anna but after Eve. Who finished first?",
-            options: ["Anna", "Bob", "Carol", "Eve"],
-            correct: 2,
-            category: "logical"
-        },
-        {
-            question: "If it's not true that 'all cats are black', which of these must be true?",
-            options: ["No cats are black", "Some cats are not black", "All cats are not black", "Some cats are black"],
-            correct: 1,
-            category: "logical"
-        }
-    ],
-    
-    si: [
-        // Mathematical Reasoning
-        {
-            question: "240 හි 15% කීයද?",
-            options: ["30", "36", "40", "45"],
-            correct: 1,
-            category: "mathematical"
-        },
-        {
-            question: "3x + 7 = 22 නම්, x හි අගය කුමක්ද?",
-            options: ["3", "5", "7", "9"],
-            correct: 1,
-            category: "mathematical"
-        },
-        {
-            question: "ශ්‍රේණිය සම්පූර්ණ කරන්න: 3, 7, 15, 31, 63, ?",
-            options: ["95", "127", "159", "191"],
-            correct: 1,
-            category: "mathematical"
-        },
-        
-        // Logical Reasoning
-        {
-            question: "සියලු පක්ෂීන්ට පියාසර කළ හැකි අතර පෙන්ගුයින් පක්ෂීන් වන නමුත් පෙන්ගුයින්ට පියාසර කළ නොහැකි නම්, අපට නිගමනය කළ හැක්කේ කුමක්ද?",
-            options: ["පළමු ප්‍රකාශනය වැරදිය", "පෙන්ගුයින් පක්ෂීන් නොවේ", "ප්‍රකාශන දෙකම සත්‍ය විය හැක", "තර්කය පරස්පර වේ"],
-            correct: 0,
-            category: "logical"
-        },
-        {
-            question: "30 දෙනෙකුගෙන් යුත් කණ්ඩායමක, 18 දෙනෙකු තේ කැමති, 16 දෙනෙකු කෝපි කැමති, 8 දෙනෙකු දෙකම කැමති. කිසිවක් නොකැමති කීදෙනෙකු?",
-            options: ["2", "4", "6", "8"],
-            correct: 1,
-            category: "logical"
-        },
-        
-        // Symbolic Pattern Recognition
-        {
-            question: "මෙම රටාවේ මීළඟ කොටස: ○●○○●○○○●○○○○●?",
-            options: ["○○○○○●", "○○○○●", "●○○○○", "○●○○○"],
-            correct: 0,
-            category: "symbolic"
-        },
-        {
-            question: "රටාව සම්පූර්ණ කරන සංකේතය: △□○ △□? △□●",
-            options: ["○", "●", "△", "□"],
-            correct: 1,
-            category: "symbolic"
-        },
-        {
-            question: "★ = 5, ♦ = 3, ♠ = 7 නම්, ★ + ♦ × ♠ = ?",
-            options: ["26", "56", "40", "31"],
-            correct: 0,
-            category: "symbolic"
-        },
-        {
-            question: "රටාව සම්පූර්ණ කරන්න: ◐◑◒◓◐◑◒?",
-            options: ["◐", "◑", "◒", "◓"],
-            correct: 3,
-            category: "symbolic"
-        },
-        
-        // Spatial Reasoning
-        {
-            question: "මෙම රූපයේ ත්‍රිකෝණ කීයක් ද: ▲ කුඩා ත්‍රිකෝණ 4කට බෙදා ඇති විශාල ත්‍රිකෝණයක්?",
-            options: ["4", "6", "8", "13"],
-            correct: 3,
-            category: "spatial"
-        },
-        {
-            question: "චතුරස්‍ර කඩදාසියක් දෙවරක් නැවී එක් කෙළවරක් කැපුවහොත්, දිගහරින්නේ විට සිදුරු කීයක් ඇතිවේද?",
-            options: ["1", "2", "4", "8"],
-            correct: 2,
-            category: "spatial"
-        },
-        
-        // Analogical Reasoning
-        {
-            question: "සාගරය වතුරට යම් සේ පුස්තකාලය කුමකට ද:",
-            options: ["පොත්", "දැනුම", "කියවීම", "නිහඬතාව"],
-            correct: 0,
-            category: "analogical"
-        },
-        {
-            question: "උෂ්ණත්වමානය උෂ්ණත්වයට යම් සේ වායුමානය කුමකට ද:",
-            options: ["කාලගුණය", "පීඩනය", "සුළඟ", "වර්ෂාව"],
-            correct: 1,
-            category: "analogical"
-        },
-        
-        // Verbal/Linguistic
-        {
-            question: "ASTRONOMY අකුරුවලින් හැදිය හැකි වචනය:",
-            options: ["STRONG", "ROMANS", "MAYORS", "STREAM"],
-            correct: 2,
-            category: "verbal"
-        },
-        {
-            question: "වෙනස්ම වචනය: RUSH, PUSH, BUSH, HUSH, CASH?",
-            options: ["RUSH", "PUSH", "BUSH", "CASH"],
-            correct: 3,
-            category: "verbal"
-        },
-        
-        // Number Series
-        {
-            question: "මීළඟ සංඛ්‍යාව: 1, 8, 27, 64, 125, ?",
-            options: ["196", "216", "256", "343"],
-            correct: 1,
-            category: "numerical"
-        },
-        {
-            question: "අස්ථානගත සංඛ්‍යාව: 2, 6, 12, 20, 30, ?",
-            options: ["40", "42", "45", "48"],
-            correct: 1,
-            category: "numerical"
-        },
-        
-        // Matrix Reasoning
-        {
-            question: "3×3 ජාලකයක සෑම පේළියකම සෑම තීරයකම ○, △, □ එක් වරක් තිබිය යුතු නම්, ඉහළ පේළිය ○△□ සහ මැද පේළිය △ ගින් ආරම්භ වන්නේ නම්, මැද පේළියේ මීළඟ කොටස?",
-            options: ["○□", "□○", "△○", "○△"],
-            correct: 1,
-            category: "matrix"
-        },
-        
-        // Abstract Reasoning
-        {
-            question: "↑ යන්නෙන් +2, ↓ යන්නෙන් -1, → යන්නෙන් ×3 අදහස් වන්නේ නම්: 5 ↑ ↓ → හි ප්‍රතිඵලය?",
-            options: ["18", "21", "24", "15"],
-            correct: 0,
-            category: "abstract"
-        },
-        
-        // Complex Logic
-        {
-            question: "ධාවන තරඟයකදී, අන්නා බොබ්ට වඩා පෙර නමුත් කැරොල්ට පසුව අවසන් කළාය. ඩේවිඩ් අන්නාට පෙර නමුත් ඊව්ට පසුව අවසන් කළාය. පළමුව කවුද?",
-            options: ["අන්නා", "බොබ්", "කැරොල්", "ඊව්"],
-            correct: 2,
-            category: "logical"
-        },
-        {
-            question: "'සියලු බළලුන් කළු ය' යන්න සත්‍ය නොවන්නේ නම්, මෙයින් සත්‍ය විය යුත්තේ කුමක්ද?",
-            options: ["කිසිදු බළලෙකු කළු නැත", "සමහර බළලුන් කළු නොවේ", "සියලු බළලුන් කළු නොවේ", "සමහර බළලුන් කළු ය"],
-            correct: 1,
-            category: "logical"
-        }
-    ]
-};
+        // Password for accessing the test
+        const ACCESS_PASSWORD = "IQ2025";
 
-        // Initialize the app
+        // Complete Question Sets with 4 difficulty levels (20 questions each)
+        const questionSets = {
+            en: [
+                {
+                    id: 1,
+                    title: "Beginner Level",
+                    description: "Start your IQ journey here",
+                    difficulty: "easy",
+                    questions: [
+                        {
+                            question: "What comes next in the sequence: 2, 4, 6, 8, ?",
+                            options: ["9", "10", "11", "12"],
+                            correct: 1
+                        },
+                        {
+                            question: "Which word does not belong: Apple, Banana, Carrot, Orange?",
+                            options: ["Apple", "Banana", "Carrot", "Orange"],
+                            correct: 2
+                        },
+                        {
+                            question: "If all Bloops are Razzies and all Razzies are Loppies, then all Bloops are definitely Loppies?",
+                            options: ["True", "False", "Uncertain", "None"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which number is the odd one out: 3, 6, 9, 12, 15, 17?",
+                            options: ["3", "9", "15", "17"],
+                            correct: 3
+                        },
+                        {
+                            question: "Complete the analogy: Cat is to Kitten as Dog is to...?",
+                            options: ["Puppy", "Cub", "Foal", "Calf"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which shape comes next? (◯, □, △, ◯, □, ?)",
+                            options: ["◯", "□", "△", "◇"],
+                            correct: 2
+                        },
+                        {
+                            question: "If you rearrange the letters 'CIFAIPC', you would have the name of a:",
+                            options: ["City", "Animal", "Ocean", "Country"],
+                            correct: 3
+                        },
+                        {
+                            question: "Which is the smallest?",
+                            options: ["0.1", "0.01", "0.001", "0.0001"],
+                            correct: 3
+                        },
+                        {
+                            question: "What is the next letter: A, C, E, G, ?",
+                            options: ["H", "I", "J", "K"],
+                            correct: 1
+                        },
+                        {
+                            question: "If all Zips are Zaps and some Zaps are Zops, then some Zips are definitely Zops?",
+                            options: ["True", "False", "Uncertain", "None"],
+                            correct: 2
+                        },
+                        {
+                            question: "Which word is the opposite of 'Generous'?",
+                            options: ["Kind", "Stingy", "Giving", "Friendly"],
+                            correct: 1
+                        },
+                        {
+                            question: "If a doctor gives you 3 pills and tells you to take one every half hour, how long will the pills last?",
+                            options: ["1 hour", "1.5 hours", "2 hours", "2.5 hours"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which number is one-third of one-half of one-fifth of 300?",
+                            options: ["10", "15", "20", "25"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which is the longest time?",
+                            options: ["1000 seconds", "20 minutes", "1 hour", "0.1 days"],
+                            correct: 2
+                        },
+                        {
+                            question: "What is the missing number: 8, 16, 32, 64, ?",
+                            options: ["96", "128", "144", "160"],
+                            correct: 1
+                        },
+                        {
+                            question: "If some Smaugs are Thors and some Thors are Thrains, then some Smaugs are definitely Thrains?",
+                            options: ["True", "False", "Uncertain", "None"],
+                            correct: 2
+                        },
+                        {
+                            question: "Which word does not belong: Happy, Joyful, Elated, Miserable?",
+                            options: ["Happy", "Joyful", "Elated", "Miserable"],
+                            correct: 3
+                        },
+                        {
+                            question: "Complete the sequence: A, B, D, G, K, ?",
+                            options: ["O", "P", "Q", "R"],
+                            correct: 1
+                        },
+                        {
+                            question: "If you have 12 pairs of shoes and lose 7 individual shoes, how many complete pairs do you have left?",
+                            options: ["5", "6", "8", "9"],
+                            correct: 2
+                        },
+                        {
+                            question: "What is 25% of 200?",
+                            options: ["25", "50", "75", "100"],
+                            correct: 1
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Intermediate Level",
+                    description: "Test your logical thinking",
+                    difficulty: "medium",
+                    questions: [
+                        {
+                            question: "What comes next in the sequence: 2, 4, 8, 16, ?",
+                            options: ["24", "32", "20", "28"],
+                            correct: 1
+                        },
+                        {
+                            question: "If all Bloops are Razzies and no Razzies are Loppies, then no Bloops are Loppies?",
+                            options: ["True", "False", "Uncertain", "None"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which number is the odd one out: 2, 5, 10, 17, 26, 37, 50?",
+                            options: ["2", "5", "17", "50"],
+                            correct: 1
+                        },
+                        {
+                            question: "Complete the analogy: Ocean is to Water as Desert is to...?",
+                            options: ["Sand", "Heat", "Cactus", "Dryness"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is the next in the series: △, ◯, □, △, △, ◯, □, △, △, △, ◯, ?",
+                            options: ["△", "◯", "□", "◇"],
+                            correct: 2
+                        },
+                        {
+                            question: "If you rearrange the letters 'RAPIS', you would have the name of a:",
+                            options: ["Fruit", "Country", "City", "River"],
+                            correct: 1
+                        },
+                        {
+                            question: "Which is the largest?",
+                            options: ["1/2", "3/5", "5/8", "7/12"],
+                            correct: 2
+                        },
+                        {
+                            question: "What is the next letter: B, D, G, K, P, ?",
+                            options: ["S", "T", "U", "V"],
+                            correct: 3
+                        },
+                        {
+                            question: "If some Frogs are Toads and all Toads are Amphibians, then some Frogs are definitely Amphibians?",
+                            options: ["True", "False", "Uncertain", "None"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which word is the opposite of 'Cautious'?",
+                            options: ["Careful", "Reckless", "Prudent", "Wary"],
+                            correct: 1
+                        },
+                        {
+                            question: "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?",
+                            options: ["1 minute", "5 minutes", "100 minutes", "500 minutes"],
+                            correct: 1
+                        },
+                        {
+                            question: "What is 30% of 1/3 of 900?",
+                            options: ["90", "100", "120", "150"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which is the heaviest?",
+                            options: ["1 kg of feathers", "1 kg of lead", "1 kg of gold", "All are equal"],
+                            correct: 3
+                        },
+                        {
+                            question: "What is the missing number: 1, 1, 2, 3, 5, 8, 13, ?",
+                            options: ["18", "20", "21", "23"],
+                            correct: 2
+                        },
+                        {
+                            question: "If no Smaugs are Thors and all Thors are Thrains, then no Smaugs are Thrains?",
+                            options: ["True", "False", "Uncertain", "None"],
+                            correct: 2
+                        },
+                        {
+                            question: "Which word does not belong: Circle, Square, Triangle, Rectangle?",
+                            options: ["Circle", "Square", "Triangle", "Rectangle"],
+                            correct: 0
+                        },
+                        {
+                            question: "Complete the sequence: 1, 4, 9, 16, 25, ?",
+                            options: ["30", "36", "40", "45"],
+                            correct: 1
+                        },
+                        {
+                            question: "If you have 10 coins totaling $1.19 and you have coins of 1, 5, 10, 25, and 50 cents, what is the minimum number of coins you have?",
+                            options: ["5", "6", "7", "8"],
+                            correct: 2
+                        },
+                        {
+                            question: "What is the next prime number after 29?",
+                            options: ["31", "33", "35", "37"],
+                            correct: 0
+                        },
+                        {
+                            question: "If 3 people can paint 3 fences in 3 hours, how many people are needed to paint 9 fences in 9 hours?",
+                            options: ["3", "6", "9", "12"],
+                            correct: 0
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Advanced Level",
+                    description: "Challenge your cognitive abilities",
+                    difficulty: "hard",
+                    questions: [
+                        {
+                            question: "What is the next number in the sequence: 1, 4, 9, 16, 25, 36, ?",
+                            options: ["42", "49", "64", "81"],
+                            correct: 1
+                        },
+                        {
+                            question: "If all A are B, some B are C, and no C are D, then:",
+                            options: ["Some A are C", "No A are D", "Some B are not D", "All are possible"],
+                            correct: 3
+                        },
+                        {
+                            question: "Which number is the odd one out: 31, 41, 51, 61, 71?",
+                            options: ["31", "41", "51", "61"],
+                            correct: 2
+                        },
+                        {
+                            question: "Complete the analogy: Thermometer is to Temperature as Barometer is to...?",
+                            options: ["Pressure", "Humidity", "Wind", "Precipitation"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is the next in the series: ▲, ▼, ◀, ▶, ▲, ▲, ▼, ▼, ◀, ◀, ▶, ▶, ▲, ▲, ▲, ▼, ▼, ▼, ?",
+                            options: ["◀", "▶", "▲", "▼"],
+                            correct: 0
+                        },
+                        {
+                            question: "If you rearrange the letters 'GNIKSROF', you would have the name of a:",
+                            options: ["Animal", "Country", "Profession", "Planet"],
+                            correct: 1
+                        },
+                        {
+                            question: "Which fraction is largest?",
+                            options: ["3/4", "5/6", "7/8", "9/10"],
+                            correct: 3
+                        },
+                        {
+                            question: "What is the next letter: Z, X, U, Q, L, ?",
+                            options: ["F", "G", "H", "I"],
+                            correct: 0
+                        },
+                        {
+                            question: "If all P are Q, some Q are R, and all R are S, then which must be true?",
+                            options: ["All P are S", "Some P are R", "Some S are P", "None must be true"],
+                            correct: 3
+                        },
+                        {
+                            question: "Which word is the opposite of 'Ephemeral'?",
+                            options: ["Temporary", "Permanent", "Fleeting", "Brief"],
+                            correct: 1
+                        },
+                        {
+                            question: "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost?",
+                            options: ["$0.05", "$0.10", "$0.15", "$0.20"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is 40% of 1/4 of 2000?",
+                            options: ["100", "150", "200", "250"],
+                            correct: 2
+                        },
+                        {
+                            question: "Which weighs more?",
+                            options: ["1 kg of feathers", "1 kg of gold", "1 kg of steel", "All are equal"],
+                            correct: 3
+                        },
+                        {
+                            question: "What is the missing number: 2, 3, 5, 7, 11, 13, ?",
+                            options: ["15", "17", "19", "21"],
+                            correct: 1
+                        },
+                        {
+                            question: "If no J are K, all K are L, and some L are M, then:",
+                            options: ["Some J are M", "No J are M", "Some L are not J", "All are possible"],
+                            correct: 3
+                        },
+                        {
+                            question: "Which word does not belong: Velocity, Acceleration, Momentum, Gravity?",
+                            options: ["Velocity", "Acceleration", "Momentum", "Gravity"],
+                            correct: 3
+                        },
+                        {
+                            question: "Complete the sequence: 1, 3, 6, 10, 15, 21, ?",
+                            options: ["25", "27", "28", "30"],
+                            correct: 2
+                        },
+                        {
+                            question: "If 5 cats can catch 5 mice in 5 minutes, how many cats are needed to catch 100 mice in 100 minutes?",
+                            options: ["5", "20", "100", "500"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is the next prime number after 47?",
+                            options: ["49", "51", "53", "55"],
+                            correct: 2
+                        },
+                        {
+                            question: "If 6 builders can build 6 houses in 6 months, how many builders are needed to build 12 houses in 12 months?",
+                            options: ["6", "12", "18", "24"],
+                            correct: 0
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Expert Level",
+                    description: "For highly intelligent minds",
+                    difficulty: "expert",
+                    questions: [
+                        {
+                            question: "What is the next number in the sequence: 1, 11, 21, 1211, 111221, ?",
+                            options: ["312211", "311221", "13112221", "1113213211"],
+                            correct: 0
+                        },
+                        {
+                            question: "If all A are B, some B are C, and no C are D, then which cannot be true?",
+                            options: ["Some A are D", "All B are D", "Some C are A", "All D are C"],
+                            correct: 1
+                        },
+                        {
+                            question: "Which number is the odd one out: 4, 9, 16, 25, 36, 49, 64, 81?",
+                            options: ["4", "9", "25", "49"],
+                            correct: 0
+                        },
+                        {
+                            question: "Complete the analogy: Mitochondria is to Cell as Nucleus is to...?",
+                            options: ["Atom", "Organ", "Body", "Brain"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is the next in the series: ♠, ♥, ♦, ♣, ♠, ♠, ♥, ♥, ♦, ♦, ♣, ♣, ♠, ♠, ♠, ♥, ♥, ♥, ?",
+                            options: ["♦", "♣", "♠", "♥"],
+                            correct: 0
+                        },
+                        {
+                            question: "If you rearrange the letters 'EMIRCNOA', you would have the name of a:",
+                            options: ["Continent", "Country", "Ocean", "Mountain"],
+                            correct: 0
+                        },
+                        {
+                            question: "Which fraction is smallest?",
+                            options: ["11/20", "3/5", "7/10", "13/20"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is the next letter: A, Z, B, Y, C, X, D, ?",
+                            options: ["E", "W", "V", "F"],
+                            correct: 1
+                        },
+                        {
+                            question: "If no J are K, all K are L, no L are M, and all M are N, then:",
+                            options: ["Some J are N", "No J are N", "Some N are not K", "All are possible"],
+                            correct: 3
+                        },
+                        {
+                            question: "Which word is the opposite of 'Ubiquitous'?",
+                            options: ["Common", "Rare", "Everywhere", "Nowhere"],
+                            correct: 1
+                        },
+                        {
+                            question: "If 3 workers can build 3 sheds in 3 days, how many days would it take 1 worker to build 1 shed?",
+                            options: ["1 day", "3 days", "6 days", "9 days"],
+                            correct: 1
+                        },
+                        {
+                            question: "What is 75% of 2/3 of 360?",
+                            options: ["90", "120", "180", "240"],
+                            correct: 2
+                        },
+                        {
+                            question: "Which travels fastest?",
+                            options: ["Light", "Sound", "Electricity", "All are equal"],
+                            correct: 0
+                        },
+                        {
+                            question: "What is the missing number: 1, 8, 27, 64, 125, ?",
+                            options: ["216", "225", "256", "343"],
+                            correct: 0
+                        },
+                        {
+                            question: "If all P are Q, some Q are R, no R are S, and some S are T, then:",
+                            options: ["Some P are T", "No P are S", "Some Q are not S", "All are possible"],
+                            correct: 3
+                        },
+                        {
+                            question: "Which word does not belong: Proton, Neutron, Electron, Photon?",
+                            options: ["Proton", "Neutron", "Electron", "Photon"],
+                            correct: 3
+                        },
+                        {
+                            question: "Complete the sequence: 1, 2, 4, 8, 16, 32, ?",
+                            options: ["48", "56", "64", "72"],
+                            correct: 2
+                        },
+                        {
+                            question: "If 2 painters can paint 2 rooms in 2 hours, how many painters are needed to paint 18 rooms in 6 hours?",
+                            options: ["3", "6", "9", "12"],
+                            correct: 1
+                        },
+                        {
+                            question: "What is the 7th prime number?",
+                            options: ["13", "15", "17", "19"],
+                            correct: 2
+                        },
+                        {
+                            question: "If 4 machines can produce 4 widgets in 4 minutes, how many minutes would it take 8 machines to produce 8 widgets?",
+                            options: ["2", "4", "8", "16"],
+                            correct: 1
+                        }
+                    ]
+                }
+            ],
+            si: [
+                {
+                    id: 1,
+                    title: "ආරම්භක මට්ටම",
+                    description: "ඔබේ IQ ගමන මෙතැනින් ආරම්භ කරන්න",
+                    difficulty: "easy",
+                    questions: [
+                        {
+                            question: "අනුක්‍රමයේ ඊළඟ සංඛ්‍යාව කුමක්ද: 2, 4, 6, 8, ?",
+                            options: ["9", "10", "11", "12"],
+                            correct: 1
+                        },
+                        {
+                            question: "කුමන වචනය අයත් නොවේද: ඇපල්, ඌරා, කැරට්, ඕරෙන්ජ්?",
+                            options: ["ඇපල්", "ඌරා", "කැරට්", "ඕරෙන්ජ්"],
+                            correct: 2
+                        },
+                        {
+                            question: "සියළුම බ්ලූප්ස් රැසීස් වන අතර සියළුම රැසීස් ලොපීස් නම්, සියළුම බ්ලූප්ස් ලොපීස් වේද?",
+                            options: ["සත්‍යය", "මිත්‍යාව", "නිශ්චිත නැත", "කිසිවක් නොවේ"],
+                            correct: 0
+                        },
+                        {
+                            question: "කුමන අංකය අමුතුද: 3, 6, 9, 12, 15, 17?",
+                            options: ["3", "9", "15", "17"],
+                            correct: 3
+                        },
+                        {
+                            question: "සමානාත්මතාවය සම්පූර්ණ කරන්න: පූසා යනු බළල් පැටවෙකුට සමාන වන අතර බල්ලා යනු...?",
+                            options: ["බල්ලෙකුට", "දරුවෙකුට", "පැටවෙකුට", "කුඩා එළුවෙකුට"],
+                            correct: 0
+                        },
+                        {
+                            question: "ඊළඟ හැඩය කුමක්ද? (◯, □, △, ◯, □, ?)",
+                            options: ["◯", "□", "△", "◇"],
+                            correct: 2
+                        },
+                        {
+                            question: "'CIFAIPC' අකුරු නැවත සකස් කළහොත්, ඔබට ලැබෙන්නේ:",
+                            options: ["නගරයක්", "සතෙකු", "මුහුදක්", "රටක්"],
+                            correct: 3
+                        },
+                        {
+                            question: "කුමන කුඩාම ද?",
+                            options: ["0.1", "0.01", "0.001", "0.0001"],
+                            correct: 3
+                        },
+                        {
+                            question: "ඊළඟ අකුර කුමක්ද: A, C, E, G, ?",
+                            options: ["H", "I", "J", "K"],
+                            correct: 1
+                        },
+                        {
+                            question: "සියළුම සිප්ස් සැප්ස් වන අතර සමහර සැප්ස් සොප්ස් නම්, සමහර සිප්ස් නිසැකවම සොප්ස් වේද?",
+                            options: ["සත්‍යය", "මිත්‍යාව", "නිශ්චිත නැත", "කිසිවක් නොවේ"],
+                            correct: 2
+                        },
+                        {
+                            question: "'උදාර' යන්නට ප්‍රතිවිරුද්ධ වචනය කුමක්ද?",
+                            options: ["කරුණාවන්ත", "කෑදර", "දීමනාකාරී", "යහළුවා"],
+                            correct: 1
+                        },
+                        {
+                            question: "වෛද්‍යවරයෙක් ඔබට ගුලි 3 ක් දී පැයකට එක් එක් ගුලියක් ගන්නැයි කියන්නේ නම්, ගුලි අවසන් වන්නේ කොපමණ කාලයකින්ද?",
+                            options: ["පැය 1", "පැය 1.5", "පැය 2", "පැය 2.5"],
+                            correct: 0
+                        },
+                        {
+                            question: "300 හි පස්වන කොටසෙන් අඩකින් තුනෙන් එකක් කුමක්ද?",
+                            options: ["10", "15", "20", "25"],
+                            correct: 0
+                        },
+                        {
+                            question: "කුමන කාලය දිගුමද?",
+                            options: ["තත්පර 1000", "මිනිත්තු 20", "පැය 1", "දින 0.1"],
+                            correct: 2
+                        },
+                        {
+                            question: "අතුරුදහන් අංකය කුමක්ද: 8, 16, 32, 64, ?",
+                            options: ["96", "128", "144", "160"],
+                            correct: 1
+                        },
+                        {
+                            question: "සමහර ස්මග්ස් තෝර්ස් වන අතර සමහර තෝර්ස් ත්‍රේන්ස් නම්, සමහර ස්මග්ස් නිසැකවම ත්‍රේන්ස් වේද?",
+                            options: ["සත්‍යය", "මිත්‍යාව", "නිශ්චිත නැත", "කිසිවක් නොවේ"],
+                            correct: 2
+                        },
+                        {
+                            question: "කුමන වචනය අයත් නොවේද: සතුටු, ආනන්ද, ප්‍රීතිමත්, දුක්ඛිත?",
+                            options: ["සතුටු", "ආනන්ද", "ප්‍රීතිමත්", "දුක්ඛිත"],
+                            correct: 3
+                        },
+                        {
+                            question: "අනුක්‍රමය සම්පූර්ණ කරන්න: A, B, D, G, K, ?",
+                            options: ["O", "P", "Q", "R"],
+                            correct: 1
+                        },
+                        {
+                            question: "ඔබට සපත්තු යුගල 12ක් තිබෙන අතර ඔබ තනි සපත්තු 7ක් අහිමි වුවහොත්, ඔබට කොපමණ සම්පූර්ණ යුගල ඉතිරිව ඇත්ද?",
+                            options: ["5", "6", "8", "9"],
+                            correct: 2
+                        },
+                        {
+                            question: "200 න් 25% ක් කුමක්ද?",
+                            options: ["25", "50", "75", "100"],
+                            correct: 1
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "මධ්‍යම මට්ටම",
+                    description: "ඔබේ තාර්කික චින්තනය පරීක්ෂා කරන්න",
+                    difficulty: "medium",
+                    questions: [
+                        {
+                            question: "අනුක්‍රමයේ ඊළඟ සංඛ්‍යාව කුමක්ද: 2, 4, 8, 16, ?",
+                            options: ["24", "32", "20", "28"],
+                            correct: 1
+                        },
+                        {
+                            question: "සියළුම බ්ලූප්ස් රැසීස් වන අතර කිසිදු රැසීස් ලොපීස් නොවේ නම්, කිසිදු බ්ලූප්ස් ලොපීස් නොවේද?",
+                            options: ["සත්‍යය", "මිත්‍යාව", "නිශ්චිත නැත", "කිසිවක් නොවේ"],
+                            correct: 0
+                        },
+                        {
+                            question: "කුමන අංකය අමුතුද: 2, 5, 10, 17, 26, 37, 50?",
+                            options: ["2", "5", "17", "50"],
+                            correct: 1
+                        },
+                        {
+                            question: "සමානාත්මතාවය සම්පූර්ණ කරන්න: සාගරය ජලයට සමාන වන අතර කාන්තාරය...?",
+                            options: ["වැලි", "උණුසුම", "කටුස්", "නියඟය"],
+                            correct: 0
+                        },
+                        {
+                            question: "ඊළඟ ශ්‍රේණිය කුමක්ද: △, ◯, □, △, △, ◯, □, △, △, △, ◯, ?",
+                            options: ["△", "◯", "□", "◇"],
+                            correct: 2
+                        },
+                        {
+                            question: "'RAPIS' අකුරු නැවත සකස් කළහොත්, ඔබට ලැබෙන්නේ:",
+                            options: ["පලතුරක්", "රටක්", "නගරයක්", "ගඟක්"],
+                            correct: 1
+                        },
+                        {
+                            question: "කුමන විශාලතමද?",
+                            options: ["1/2", "3/5", "5/8", "7/12"],
+                            correct: 2
+                        },
+                        {
+                            question: "ඊළඟ අකුර කුමක්ද: B, D, G, K, P, ?",
+                            options: ["S", "T", "U", "V"],
+                            correct: 3
+                        },
+                        {
+                            question: "සමහර ගෙම්බන් ගෙම්බන් වන අතර සියළුම ගෙම්බන් උභයජීවීන් නම්, සමහර ගෙම්බන් නිසැකවම උභයජීවීන් වේද?",
+                            options: ["සත්‍යය", "මිත්‍යාව", "නිශ්චිත නැත", "කිසිවක් නොවේ"],
+                            correct: 0
+                        },
+                        {
+                            question: "'ප්‍රවේශම්' යන්නට ප්‍රතිවිරුද්ධ වචනය කුමක්ද?",
+                            options: ["ප්‍රවේශම්", "අවිනීත", "සාවධාන", "අවධානයෙන්"],
+                            correct: 1
+                        },
+                        {
+                            question: "යන්ත්‍ර 5ක් විජෙට්ටු 5ක් සෑදීමට විනාඩි 5ක් ගතවන්නේ නම්, විජෙට්ටු 100ක් සෑදීමට යන්ත්‍ර 100කට කොපමණ කාලයක් ගතවේද?",
+                            options: ["විනාඩි 1", "විනාඩි 5", "විනාඩි 100", "විනාඩි 500"],
+                            correct: 1
+                        },
+                        {
+                            question: "900 හි තුන්වන කොටසෙන් අඩකින් 30% ක් කුමක්ද?",
+                            options: ["90", "100", "120", "150"],
+                            correct: 0
+                        },
+                        {
+                            question: "කුමන බර වැඩිද?",
+                            options: ["පිහාටු kg 1", "ලීඩ් kg 1", "රන් kg 1", "සියල්ල සමානය"],
+                            correct: 3
+                        },
+                        {
+                            question: "අතුරුදහන් අංකය කුමක්ද: 1, 1, 2, 3, 5, 8, 13, ?",
+                            options: ["18", "20", "21", "23"],
+                            correct: 2
+                        },
+                        {
+                            question: "කිසිදු ස්මග්ස් තෝර්ස් නොවන අතර සියළුම තෝර්ස් ත්‍රේන්ස් නම්, කිසිදු ස්මග්ස් ත්‍රේන්ස් නොවේද?",
+                            options: ["සත්‍යය", "මිත්‍යාව", "නිශ්චිත නැත", "කිසිවක් නොවේ"],
+                            correct: 2
+                        },
+                        {
+                            question: "කුමන වචනය අයත් නොවේද: රවුම, චතුරස්‍රය, ත්‍රිකෝණය, සෘජුකෝණාස්‍රය?",
+                            options: ["රවුම", "චතුරස්‍රය", "ත්‍රිකෝණය", "සෘජුකෝණාස්‍රය"],
+                            correct: 0
+                        },
+                        {
+                            question: "අනුක්‍රමය සම්පූර්ණ කරන්න: 1, 4, 9, 16, 25, ?",
+                            options: ["30", "36", "40", "45"],
+                            correct: 1
+                        },
+                        {
+                            question: "ඔබට ඩොලර් 1.19 ක් සහිත කාසි 10 ක් තිබෙන අතර ඔබට 1, 5, 10, 25, සහ 50 සෙන්ට් කාසි තිබේ නම්, ඔබ සතුව ඇති අවම කාසි ගණන කොපමණද?",
+                            options: ["5", "6", "7", "8"],
+                            correct: 2
+                        },
+                        {
+                            question: "29 ට පසු ඊළඟ ප්‍රාථමික අංකය කුමක්ද?",
+                            options: ["31", "33", "35", "37"],
+                            correct: 0
+                        },
+                        {
+                            question: "පුද්ගලයින් 3 දෙනෙකුට වැටි 3ක් පැය 3 කින් තීන්ත ආලේප කළ හැකි නම්, වැටි 9ක් පැය 9 කින් තීන්ත ආලේප කිරීමට කොපමණ පුද්ගලයින් අවශ්‍යද?",
+                            options: ["3", "6", "9", "12"],
+                            correct: 0
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "උසස් මට්ටම",
+                    description: "ඔබේ සංජාන හැකියාවන්ට අභියෝග කරන්න",
+                    difficulty: "hard",
+                    questions: [
+                        {
+                            question: "අනුක්‍රමයේ ඊළඟ සංඛ්‍යාව කුමක්ද: 1, 4, 9, 16, 25, 36, ?",
+                            options: ["42", "49", "64", "81"],
+                            correct: 1
+                        },
+                        {
+                            question: "සියළුම A B වන අතර සමහර B C වන අතර කිසිදු C D නොවේ නම්:",
+                            options: ["සමහර A C වේ", "කිසිදු A D නොවේ", "සමහර B D නොවේ", "සියල්ලම හැකි"],
+                            correct: 3
+                        },
+                        {
+                            question: "කුමන අංකය අමුතුද: 31, 41, 51, 61, 71?",
+                            options: ["31", "41", "51", "61"],
+                            correct: 2
+                        },
+                        {
+                            question: "සමානාත්මතාවය සම්පූර්ණ කරන්න: තාපමානය උෂ්ණත්වයට සමාන වන අතර තාපමානය...?",
+                            options: ["පීඩනය", "ආර්ද්‍රතාව", "සුළං", "වර්ෂාපතනය"],
+                            correct: 0
+                        },
+                        {
+                            question: "ඊළඟ ශ්‍රේණිය කුමක්ද: ▲, ▼, ◀, ▶, ▲, ▲, ▼, ▼, ◀, ◀, ▶, ▶, ▲, ▲, ▲, ▼, ▼, ▼, ?",
+                            options: ["◀", "▶", "▲", "▼"],
+                            correct: 0
+                        },
+                        {
+                            question: "'GNIKSROF' අකුරු නැවත සකස් කළහොත්, ඔබට ලැබෙන්නේ:",
+                            options: ["සතෙකු", "රටක්", "වෘත්තියක්", "ග්‍රහලොවක්"],
+                            correct: 1
+                        },
+                        {
+                            question: "කුමන භාගය විශාලතමද?",
+                            options: ["3/4", "5/6", "7/8", "9/10"],
+                            correct: 3
+                        },
+                        {
+                            question: "ඊළඟ අකුර කුමක්ද: Z, X, U, Q, L, ?",
+                            options: ["F", "G", "H", "I"],
+                            correct: 0
+                        },
+                        {
+                            question: "සියළුම P Q වන අතර සමහර Q R වන අතර සියළුම R S නම්, කුමන එක නිසැකවම සත්‍ය විය යුතුද?",
+                            options: ["සියළුම P S වේ", "සමහර P R වේ", "සමහර S P වේ", "කිසිවක් නිසැකවම සත්‍ය නොවේ"],
+                            correct: 3
+                        },
+                        {
+                            question: "'ක්ෂණික' යන්නට ප්‍රතිවිරුද්ධ වචනය කුමක්ද?",
+                            options: ["තාවකාලික", "ස්ථිර", "කෙටිකාලීන", "කෙටි"],
+                            correct: 1
+                        },
+                        {
+                            question: "බැට් එකක් සහ පන්දුවක් එකට ඩොලර් 1.10 ක් වැයවේ. බැට් එක පන්දුවට වඩා ඩොලර් 1.00 කින් වැඩිය. පන්දුවේ මිල කුමක්ද?",
+                            options: ["$0.05", "$0.10", "$0.15", "$0.20"],
+                            correct: 0
+                        },
+                        {
+                            question: "2000 හි හතරෙන් එකෙන් 40% ක් කුමක්ද?",
+                            options: ["100", "150", "200", "250"],
+                            correct: 2
+                        },
+                        {
+                            question: "කුමන බර වැඩිද?",
+                            options: ["පිහාටු kg 1", "රන් kg 1", "තාප්ප kg 1", "සියල්ල සමානය"],
+                            correct: 3
+                        },
+                        {
+                            question: "අතුරුදහන් අංකය කුමක්ද: 2, 3, 5, 7, 11, 13, ?",
+                            options: ["15", "17", "19", "21"],
+                            correct: 1
+                        },
+                        {
+                            question: "කිසිදු J K නොවන අතර සියළුම K L වන අතර සමහර L M නම්:",
+                            options: ["සමහර J M වේ", "කිසිදු J M නොවේ", "සමහර L J නොවේ", "සියල්ලම හැකි"],
+                            correct: 3
+                        },
+                        {
+                            question: "කුමන වචනය අයත් නොවේද: ප්‍රවේගය, ත්වරණය, ගම්‍යතාවය, ගුරුත්වය?",
+                            options: ["ප්‍රවේගය", "ත්වරණය", "ගම්‍යතාවය", "ගුරුත්වය"],
+                            correct: 3
+                        },
+                        {
+                            question: "අනුක්‍රමය සම්පූර්ණ කරන්න: 1, 3, 6, 10, 15, 21, ?",
+                            options: ["25", "27", "28", "30"],
+                            correct: 2
+                        },
+                        {
+                            question: "බළලුන් 5 දෙනෙකුට මීයන් 5 දෙනෙකුට විනාඩි 5 කින් අල්ලා ගත හැකි නම්, මීයන් 100 දෙනෙකුට විනාඩි 100 කින් අල්ලා ගැනීමට කොපමණ බළලුන් අවශ්‍යද?",
+                            options: ["5", "20", "100", "500"],
+                            correct: 0
+                        },
+                        {
+                            question: "47 ට පසු ඊළඟ ප්‍රාථමික අංකය කුමක්ද?",
+                            options: ["49", "51", "53", "55"],
+                            correct: 2
+                        },
+                        {
+                            question: "ඉදිකරුවන් 6 දෙනෙකුට මාස 6 කින් නිවාස 6 ක් ඉදිකළ හැකි නම්, මාස 12 කින් නිවාස 12 ක් ඉදිකිරීමට කොපමණ ඉදිකරුවන් අවශ්‍යද?",
+                            options: ["6", "12", "18", "24"],
+                            correct: 0
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "විශේෂඥ මට්ටම",
+                    description: "අතිශය බුද්ධිමත් මනස් සඳහා",
+                    difficulty: "expert",
+                    questions: [
+                        {
+                            question: "අනුක්‍රමයේ ඊළඟ සංඛ්‍යාව කුමක්ද: 1, 11, 21, 1211, 111221, ?",
+                            options: ["312211", "311221", "13112221", "1113213211"],
+                            correct: 0
+                        },
+                        {
+                            question: "සියළුම A B වන අතර සමහර B C වන අතර කිසිදු C D නොවේ නම්, කුමන එක සත්‍ය විය නොහැකිද?",
+                            options: ["සමහර A D වේ", "සියළුම B D වේ", "සමහර C A වේ", "සියළුම D C වේ"],
+                            correct: 1
+                        },
+                        {
+                            question: "කුමන අංකය අමුතුද: 4, 9, 16, 25, 36, 49, 64, 81?",
+                            options: ["4", "9", "25", "49"],
+                            correct: 0
+                        },
+                        {
+                            question: "සමානාත්මතාවය සම්පූර්ණ කරන්න: මයිටොකොන්ඩ්‍රියාව සෛලයට සමාන වන අතර න්‍යෂ්ටිය...?",
+                            options: ["පරමාණුව", "අවයවය", "ශරීරය", "මොළය"],
+                            correct: 0
+                        },
+                        {
+                            question: "ඊළඟ ශ්‍රේණිය කුමක්ද: ♠, ♥, ♦, ♣, ♠, ♠, ♥, ♥, ♦, ♦, ♣, ♣, ♠, ♠, ♠, ♥, ♥, ♥, ?",
+                            options: ["♦", "♣", "♠", "♥"],
+                            correct: 0
+                        },
+                        {
+                            question: "'EMIRCNOA' අකුරු නැවත සකස් කළහොත්, ඔබට ලැබෙන්නේ:",
+                            options: ["මහාද්වීපයක්", "රටක්", "මුහුදක්", "පර්වතයක්"],
+                            correct: 0
+                        },
+                        {
+                            question: "කුමන භාගය කුඩාමද?",
+                            options: ["11/20", "3/5", "7/10", "13/20"],
+                            correct: 0
+                        },
+                        {
+                            question: "ඊළඟ අකුර කුමක්ද: A, Z, B, Y, C, X, D, ?",
+                            options: ["E", "W", "V", "F"],
+                            correct: 1
+                        },
+                        {
+                            question: "කිසිදු J K නොවන අතර සියළුම K L වන අතර කිසිදු L M නොවන අතර සියළුම M N නම්:",
+                            options: ["සමහර J N වේ", "කිසිදු J N නොවේ", "සමහර N K නොවේ", "සියල්ලම හැකි"],
+                            correct: 3
+                        },
+                        {
+                            question: "'සර්වත්‍ර' යන්නට ප්‍රතිවිරුද්ධ වචනය කුමක්ද?",
+                            options: ["පොදු", "දුර්ලභ", "සෑම තැනකම", "කිසිම තැනක නැත"],
+                            correct: 1
+                        },
+                        {
+                            question: "කම්කරුවන් 3 දෙනෙකුට කුටි 3 ක් දින 3 කින් තනා ගත හැකි නම්, කම්කරුවෙකුට කුටියක් තනා ගැනීමට කොපමණ දින ගතවේද?",
+                            options: ["දින 1", "දින 3", "දින 6", "දින 9"],
+                            correct: 1
+                        },
+                        {
+                            question: "360 හි තුන්වන කොටසෙන් අඩකින් 75% ක් කුමක්ද?",
+                            options: ["90", "120", "180", "240"],
+                            correct: 2
+                        },
+                        {
+                            question: "කුමන වේගයෙන් ගමන් කරයිද?",
+                            options: ["ආලෝකය", "ශබ්දය", "විදුලිය", "සියල්ල සමානය"],
+                            correct: 0
+                        },
+                        {
+                            question: "අතුරුදහන් අංකය කුමක්ද: 1, 8, 27, 64, 125, ?",
+                            options: ["216", "225", "256", "343"],
+                            correct: 0
+                        },
+                        {
+                            question: "සියළුම P Q වන අතර සමහර Q R වන අතර කිසිදු R S නොවන අතර සමහර S T නම්:",
+                            options: ["සමහර P T වේ", "කිසිදු P S නොවේ", "සමහර Q S නොවේ", "සියල්ලම හැකි"],
+                            correct: 3
+                        },
+                        {
+                            question: "කුමන වචනය අයත් නොවේද: ප්‍රෝටෝනය, නියුට්‍රෝනය, ඉලෙක්ට්‍රෝනය, ෆෝටෝනය?",
+                            options: ["ප්‍රෝටෝනය", "නියුට්‍රෝනය", "ඉලෙක්ට්‍රෝනය", "ෆෝටෝනය"],
+                            correct: 3
+                        },
+                        {
+                            question: "අනුක්‍රමය සම්පූර්ණ කරන්න: 1, 2, 4, 8, 16, 32, ?",
+                            options: ["48", "56", "64", "72"],
+                            correct: 2
+                        },
+                        {
+                            question: "තීන්ත ආලේපකයන් 2 දෙනෙකුට කාමර 2ක් පැය 2 කින් තීන්ත ආලේප කළ හැකි නම්, කාමර 18ක් පැය 6 කින් තීන්ත ආලේප කිරීමට කොපමණ තීන්ත ආලේපකයන් අවශ්‍යද?",
+                            options: ["3", "6", "9", "12"],
+                            correct: 1
+                        },
+                        {
+                            question: "7 වන ප්‍රාථමික අංකය කුමක්ද?",
+                            options: ["13", "15", "17", "19"],
+                            correct: 2
+                        },
+                        {
+                            question: "යන්ත්‍ර 4ක් විජෙට්ටු 4ක් විනාඩි 4කින් නිපදවන්නේ නම්, විජෙට්ටු 8ක් නිපදවීමට යන්ත්‍ර 8කට කොපමණ විනාඩි ගතවේද?",
+                            options: ["2", "4", "8", "16"],
+                            correct: 1
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Language translations
+        const translations = {
+            en: {
+                enterAccessCode: "Enter Access Code",
+                enterPassword: "Please enter the password to access the full IQ test with all difficulty levels.",
+                unlockTest: "Unlock Test",
+                chooseChallenge: "Choose Your Challenge",
+                selectDifficulty: "Select a difficulty level to test your intelligence. Each set contains 20 unique questions.",
+                startSelectedTest: "Start Selected Test",
+                viewLeaderboard: "View Leaderboard",
+                nextQuestion: "Next Question",
+                yourResults: "Your Results",
+                shareOnFacebook: "Share on Facebook",
+                shareOnTwitter: "Share on Twitter",
+                shareOnWhatsApp: "Share on WhatsApp",
+                shareOnLinkedIn: "Share on LinkedIn",
+                chooseAnotherSet: "Choose Another Set",
+                topScores: "Top Scores",
+                backToSets: "Back to Sets",
+                set: "Set:",
+                time: "Time:",
+                wrongPassword: "Incorrect password. Please try again.",
+                selectSet: "Please select a difficulty set first.",
+                questionOf: "Question {current} of {total}",
+                minutes: "min",
+                seconds: "sec",
+                questions: "Questions"
+            },
+            si: {
+                enterAccessCode: "ප්‍රවේශ කේතය ඇතුළත් කරන්න",
+                enterPassword: "සියලුම අමාරුත්ව මට්ටම් සහිත සම්පූර්ණ IQ පරීක්ෂණයට ප්‍රවේශ වීමට මුරපදය ඇතුළත් කරන්න.",
+                unlockTest: "පරීක්ෂණය අගුළු අරින්න",
+                chooseChallenge: "ඔබේ අභියෝගය තෝරන්න",
+                selectDifficulty: "ඔබේ බුද්ධිය පරීක්ෂා කිරීමට අමාරුත්ව මට්ටමක් තෝරන්න. එක් කට්ටලයක ප්‍රශ්න 20ක් තිබේ.",
+                startSelectedTest: "තෝරාගත් පරීක්ෂණය ආරම්භ කරන්න",
+                viewLeaderboard: "ලීඩර්බෝඩ් බලන්න",
+                nextQuestion: "මීළඟ ප්‍රශ්නය",
+                yourResults: "ඔබේ ප්‍රතිඵල",
+                shareOnFacebook: "Facebook හි බෙදාගන්න",
+                shareOnTwitter: "Twitter හි බෙදාගන්න",
+                shareOnWhatsApp: "WhatsApp හි බෙදාගන්න",
+                shareOnLinkedIn: "LinkedIn හි බෙදාගන්න",
+                chooseAnotherSet: "වෙනත් කට්ටලයක් තෝරන්න",
+                topScores: "ඉහළම ලකුණු",
+                backToSets: "කට්ටල වෙත",
+                set: "කට්ටලය:",
+                time: "කාලය:",
+                wrongPassword: "වැරදි මුරපදය. කරුණාකර නැවත උත්සාහ කරන්න.",
+                selectSet: "කරුණාකර මුලින්ම අමාරුත්ව කට්ටලයක් තෝරන්න.",
+                questionOf: "ප්‍රශ්නය {current} / {total}",
+                minutes: "මිනි",
+                seconds: "තත්",
+                questions: "ප්‍රශ්න"
+            }
+        };
+
+        // IQ Level calculations
+        const iqLevels = {
+            en: {
+                0: { level: "Below Average", description: "Keep practicing to improve your cognitive abilities!" },
+                5: { level: "Low Average", description: "You're on the right track, but there's room for improvement." },
+                10: { level: "Average", description: "Good job! You have solid problem-solving skills." },
+                15: { level: "Above Average", description: "Excellent work! You demonstrate strong analytical thinking." },
+                18: { level: "Superior", description: "Outstanding! You have exceptional intellectual abilities." },
+                20: { level: "Genius", description: "Perfect score! You possess remarkable intelligence!" }
+            },
+            si: {
+                0: { level: "සාමාන්‍යයට වඩා පහළ", description: "ඔබේ සංජාන හැකියාවන් වැඩි දියුණු කිරීමට අභ්‍යාස කරන්න!" },
+                5: { level: "අඩු සාමාන්‍ය", description: "ඔබ නිවැරදි මාර්ගයේ, නමුත් වැඩි දියුණු කළ හැකිය." },
+                10: { level: "සාමාන්‍ය", description: "හොඳයි! ඔබට හොඳ ගැටලු විසඳීමේ කුසලතා ඇත." },
+                15: { level: "සාමාන්‍යයට වඩා උසස්", description: "විශිෂ්ට! ඔබ ශක්තිමත් විශ්ලේෂණාත්මක චින්තනය පෙන්වයි." },
+                18: { level: "උසස්", description: "විශිෂ්ටයි! ඔබට විශේෂ බුද්ධිමය හැකියාවන් ඇත." },
+                20: { level: "ප්‍රතිභාවන්ත", description: "පරිපූර්ණ ලකුණු! ඔබ කැපී පෙනෙන බුද්ධියක් ඇත!" }
+            }
+        };
+
+        // Initialize the application
         function init() {
             updateLanguage();
             loadLeaderboard();
+            
+            // Add enter key support for password input
+            document.getElementById('password-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            
+            // Initialize visual feedback
+            addVisualFeedback();
         }
 
         // Language switching
@@ -737,581 +1603,410 @@ const questions = {
 
         function updateLanguage() {
             document.querySelectorAll('[data-en]').forEach(element => {
-                element.textContent = element.getAttribute('data-' + currentLanguage);
+                const key = element.getAttribute('data-en').toLowerCase().replace(/ /g, '');
+                if (translations[currentLanguage] && translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            
+            // Update placeholder
+            const passwordInput = document.getElementById('password-input');
+            passwordInput.placeholder = currentLanguage === 'en' ? 'Enter password' : 'මුරපදය ඇතුළත් කරන්න';
+            
+            // Update set selection if visible
+            if (document.getElementById('set-selection-screen').classList.contains('active')) {
+                populateSetSelection();
+            }
+        }
+
+        // Password checking
+        function checkPassword() {
+            const passwordInput = document.getElementById('password-input');
+            const errorDiv = document.getElementById('password-error');
+            
+            if (passwordInput.value === ACCESS_PASSWORD) {
+                isUnlocked = true;
+                errorDiv.style.display = 'none';
+                showSetSelection();
+            } else {
+                errorDiv.textContent = translations[currentLanguage].wrongPassword;
+                errorDiv.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        // Set selection
+        function showSetSelection() {
+            showScreen('set-selection-screen');
+            populateSetSelection();
+        }
+
+        function populateSetSelection() {
+            const container = document.getElementById('set-selection');
+            container.innerHTML = '';
+            
+            const sets = questionSets[currentLanguage];
+            
+            sets.forEach((set, index) => {
+                const setCard = document.createElement('div');
+                setCard.className = 'set-card';
+                
+                // Lock advanced sets if not unlocked
+                if (!isUnlocked && index > 0) {
+                    setCard.classList.add('locked-set');
+                }
+                
+                setCard.innerHTML = `
+                    <div class="set-title">${set.title}</div>
+                    <div class="set-description">${set.description}</div>
+                    <div class="set-difficulty difficulty-${set.difficulty}">${set.difficulty.toUpperCase()}</div>
+                    <div class="set-stats">
+                        <div class="stat-item">20 ${translations[currentLanguage].questions}</div>
+                        <div class="stat-item">30s ${translations[currentLanguage].perQ}</div>
+                    </div>
+                `;
+                
+                if (isUnlocked || index === 0) {
+                    setCard.addEventListener('click', () => selectSet(set));
+                }
+                
+                container.appendChild(setCard);
             });
         }
 
-        // Test functionality
+        function selectSet(set) {
+            // Remove previous selection
+            document.querySelectorAll('.set-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            event.target.closest('.set-card').classList.add('selected');
+            
+            currentSet = set;
+        }
+
+        // Test management
         function startTest() {
+            if (!currentSet) {
+                alert(translations[currentLanguage].selectSet);
+                return;
+            }
+            
             currentQuestion = 0;
             score = 0;
+            selectedAnswer = null;
             startTime = Date.now();
+            
             showScreen('test-screen');
             loadQuestion();
+            startTimer();
         }
 
         function loadQuestion() {
-            if (currentQuestion >= questions[currentLanguage].length) {
-                endTest();
-                return;
-            }
-
-            const question = questions[currentLanguage][currentQuestion];
+            const question = currentSet.questions[currentQuestion];
             
-            // Update question display
             document.getElementById('question-number').textContent = 
-                currentLanguage === 'en' ? 
-                `Question ${currentQuestion + 1} of ${questions[currentLanguage].length}` :
-                `ප්‍රශ්නය ${currentQuestion + 1}/${questions[currentLanguage].length}`;
+                translations[currentLanguage].questionOf
+                    .replace('{current}', currentQuestion + 1)
+                    .replace('{total}', currentSet.questions.length);
             
             document.getElementById('question-text').textContent = question.question;
             
-            // Update progress bar
-            const progress = ((currentQuestion + 1) / questions[currentLanguage].length) * 100;
-            document.getElementById('progress-fill').style.width = progress + '%';
-            
-            // Load options
             const optionsContainer = document.getElementById('options');
             optionsContainer.innerHTML = '';
             
             question.options.forEach((option, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'option';
-                optionDiv.textContent = option;
-                optionDiv.onclick = () => selectAnswer(index, optionDiv);
-                optionsContainer.appendChild(optionDiv);
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectAnswer(index));
+                optionsContainer.appendChild(optionElement);
             });
             
-            // Reset timer
-            timeLeft = 30;
-            startTimer();
-            
-            // Reset next button
+            updateProgressBar();
             selectedAnswer = null;
             document.getElementById('next-btn').classList.add('disabled');
         }
 
-        function selectAnswer(index, element) {
-            // Remove previous selections
-            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        function selectAnswer(answerIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
             
-            // Select current option
-            element.classList.add('selected');
-            selectedAnswer = index;
+            // Select current answer
+            document.querySelectorAll('.option')[answerIndex].classList.add('selected');
+            selectedAnswer = answerIndex;
             
             // Enable next button
             document.getElementById('next-btn').classList.remove('disabled');
         }
 
-        function startTimer() {
+        function nextQuestion() {
+            if (selectedAnswer === null) return;
+            
+            // Check if answer is correct
+            if (selectedAnswer === currentSet.questions[currentQuestion].correct) {
+                score++;
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < currentSet.questions.length) {
+                loadQuestion();
+                resetTimer();
+            } else {
+                finishTest();
+            }
+        }
+
+        function finishTest() {
             clearInterval(timer);
+            const endTime = Date.now();
+            const totalTime = Math.floor((endTime - startTime) / 1000);
+            
+            showResults(totalTime);
+            saveScore();
+        }
+
+        // Timer management
+        function startTimer() {
+            timeLeft = 30;
+            updateTimerDisplay();
+            
             timer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('timer').textContent = timeLeft;
+                updateTimerDisplay();
                 
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
+                    // Auto-advance to next question
                     nextQuestion();
                 }
             }, 1000);
         }
 
-        function nextQuestion() {
-            if (selectedAnswer !== null) {
-                const question = questions[currentLanguage][currentQuestion];
-                if (selectedAnswer === question.correct) {
-                    score++;
+        function resetTimer() {
+            clearInterval(timer);
+            startTimer();
+        }
+
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = timeLeft;
+            
+            // Change color based on time remaining
+            if (timeLeft <= 10) {
+                timerElement.style.color = '#e74c3c';
+            } else if (timeLeft <= 20) {
+                timerElement.style.color = '#f39c12';
+            } else {
+                timerElement.style.color = '#667eea';
+            }
+        }
+
+        // Progress bar
+        function updateProgressBar() {
+            const progress = ((currentQuestion) / currentSet.questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        // Results display
+        function showResults(totalTime) {
+            showScreen('results-screen');
+            
+            document.getElementById('final-score').textContent = score + '/20';
+            document.getElementById('completed-set').textContent = currentSet.title;
+            
+            // Format time
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            document.getElementById('total-time').textContent = 
+                `${minutes}${translations[currentLanguage].minutes} ${seconds}${translations[currentLanguage].seconds}`;
+            
+            // Calculate IQ level
+            const iqData = getIQLevel(score);
+            document.getElementById('iq-level').textContent = iqData.level;
+            document.getElementById('result-description').textContent = iqData.description;
+        }
+
+        function getIQLevel(score) {
+            const levels = iqLevels[currentLanguage];
+            
+            for (let threshold = 20; threshold >= 0; threshold--) {
+                if (score >= threshold && levels[threshold]) {
+                    return levels[threshold];
                 }
             }
             
-            currentQuestion++;
-            clearInterval(timer);
-            
-            if (currentQuestion >= questions[currentLanguage].length) {
-                endTest();
-            } else {
-                loadQuestion();
-            }
+            return levels[0];
         }
 
-        function endTest() {
-            clearInterval(timer);
-            
-            // Calculate IQ score
-            const totalTime = Math.round((Date.now() - startTime) / 1000);
-            const accuracy = (score / questions[currentLanguage].length) * 100;
-            const timeBonus = Math.max(0, (600 - totalTime) / 10); // Bonus for speed
-            const iqScore = Math.round(85 + (accuracy * 0.3) + timeBonus);
-            
-            // Display results
-            document.getElementById('final-score').textContent = iqScore;
-            
-            // Determine IQ level
-            let level, description;
-            if (iqScore >= 140) {
-                level = currentLanguage === 'en' ? 'Genius' : 'ප්‍රතිභාවන්ත';
-                description = currentLanguage === 'en' ? 
-                    'Exceptional intelligence! You\'re in the top 1% of the population.' :
-                    'සුවිශේෂී බුද්ධිමත්භාවයක්! ඔබ ජනගහනයෙන් 1% ට අයත් වේ.';
-            } else if (iqScore >= 120) {
-                level = currentLanguage === 'en' ? 'Superior' : 'උසස්';
-                description = currentLanguage === 'en' ? 
-                    'Above average intelligence. Great problem-solving abilities!' :
-                    'සාමාන්‍යයට වඩා ඉහළ බුද්ධිමත්භාවයක්. විශිෂ්ට ගැටලු විසඳීමේ හැකියාවක්!';
-            } else if (iqScore >= 110) {
-                level = currentLanguage === 'en' ? 'High Average' : 'ඉහළ සාමාන්‍ය';
-                description = currentLanguage === 'en' ? 
-                    'Good intelligence level. Well above average performance.' :
-                    'හොඳ බුද්ධිමත්භාවයක්. සාමාන්‍යයට වඩා හොඳ කාර්ය සාධනයක්.';
-            } else if (iqScore >= 90) {
-                level = currentLanguage === 'en' ? 'Average' : 'සාමාන්‍ය';
-                description = currentLanguage === 'en' ? 
-                    'Average intelligence. Good logical thinking skills.' :
-                    'සාමාන්‍ය බුද්ධිමත්භාවයක්. හොඳ තාර්කික චින්තන හැකියාවක්.';
-            } else {
-                level = currentLanguage === 'en' ? 'Below Average' : 'සාමාන්‍යයට වඩා අඩු';
-                description = currentLanguage === 'en' ? 
-                    'Room for improvement. Keep practicing to enhance your skills!' :
-                    'දියුණුවීමට ඉඩ ඇත. ඔබේ හැකියාවන් වැඩිදියුණු කිරීමට අඛණ්ඩව අභ්‍යාස කරන්න!';
-            }
-            
-            document.getElementById('iq-level').textContent = level;
-            document.getElementById('result-description').textContent = description;
-            
-            // Save to leaderboard
-            saveScore(iqScore);
-            
-            showScreen('results-screen');
-        }
-
-        function saveScore(iqScore) {
-            const playerName = prompt(
-                currentLanguage === 'en' ? 
-                'Enter your name for the leaderboard:' : 
-                'ලීඩර්බෝර්ඩ් සඳහා ඔබේ නම ඇතුළත් කරන්න:'
-            ) || (currentLanguage === 'en' ? 'Anonymous' : 'නිර්නාමික');
-            
-            const scoreData = {
-                name: playerName,
-                score: iqScore,
-                date: new Date().toLocaleDateString(),
-                timestamp: Date.now(),
-                language: currentLanguage
-            };
-            
-            // Show loading indicator
-            showLoadingMessage();
-            
-            // Send to Google Sheets
-            sendToGoogleSheets(scoreData);
-        }
-
-        function sendToGoogleSheets(scoreData) {
-            // Google Apps Script Web App URL - Replace with your actual URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzPWwC4TQQIjVhVk31sRiDoPNDXkjn8CvffgJcMJU8KRQ1zPgoWIbKiFPsPZbKicteyFA/exec';
-            
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(scoreData)
-            })
-            .then(() => {
-                console.log('Score saved to Google Sheets successfully');
-                hideLoadingMessage();
-                loadLeaderboard(); // Refresh leaderboard
-                showSuccessMessage();
-            })
-            .catch(error => {
-                console.error('Error saving to Google Sheets:', error);
-                hideLoadingMessage();
-                showErrorMessage();
+        // Screen management
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
             });
+            document.getElementById(screenId).classList.add('active');
         }
 
-        function loadLeaderboard() {
-            const leaderboardContainer = document.getElementById('leaderboard');
-            
-            // Show loading indicator
-            leaderboardContainer.innerHTML = `
-                <div class="leaderboard-item">
-                    <span class="loading"></span>
-                    <span>${currentLanguage === 'en' ? 'Loading scores...' : 'ලකුණු පූරණය වේ...'}</span>
-                </div>
-            `;
-            
-            // Google Apps Script Web App URL for reading data
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzPWwC4TQQIjVhVk31sRiDoPNDXkjn8CvffgJcMJU8KRQ1zPgoWIbKiFPsPZbKicteyFA/exec';
-            
-            fetch(scriptURL + '?action=getLeaderboard', {
-                method: 'GET',
-                mode: 'no-cors'
-            })
-            .then(response => response.json())
-            .then(data => {
-                displayLeaderboard(data.scores || []);
-            })
-            .catch(error => {
-                console.error('Error loading leaderboard:', error);
-                // Fallback to show empty leaderboard
-                displayLeaderboard([]);
-            });
-        }
-
-        function displayLeaderboard(scores) {
-            const leaderboardContainer = document.getElementById('leaderboard');
-            
-            if (scores.length === 0) {
-                leaderboardContainer.innerHTML = `
-                    <div class="leaderboard-item">
-                        <span>${currentLanguage === 'en' ? 'No scores yet. Be the first!' : 'තවම ලකුණු නැත. පළමුවන්නා වන්න!'}</span>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Sort scores by IQ score (highest first)
-            scores.sort((a, b) => b.score - a.score);
-            
-            leaderboardContainer.innerHTML = scores.slice(0, 10).map((entry, index) => `
-                <div class="leaderboard-item">
-                    <span>${index + 1}. ${entry.name}</span>
-                    <span>${entry.score} IQ</span>
-                    <span>${entry.date}</span>
-                </div>
-            `).join('');
-        }
-
-        function showLoadingMessage() {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = 'loading-message';
-            loadingDiv.innerHTML = `
-                <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-                            background: rgba(0,0,0,0.8); color: white; padding: 20px; border-radius: 10px; z-index: 9999;">
-                    <div class="loading" style="margin-right: 10px;"></div>
-                    <span>${currentLanguage === 'en' ? 'Saving your score...' : 'ඔබේ ලකුණු සුරකිමින්...'}</span>
-                </div>
-            `;
-            document.body.appendChild(loadingDiv);
-        }
-
-        function hideLoadingMessage() {
-            const loadingDiv = document.getElementById('loading-message');
-            if (loadingDiv) {
-                loadingDiv.remove();
-            }
-        }
-
-        function showSuccessMessage() {
-            const successDiv = document.createElement('div');
-            successDiv.innerHTML = `
-                <div style="position: fixed; top: 20px; right: 20px; 
-                            background: linear-gradient(45deg, #4CAF50, #45a049); color: white; 
-                            padding: 15px 20px; border-radius: 10px; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                    <span>${currentLanguage === 'en' ? '✓ Score saved successfully!' : '✓ ලකුණු සාර්ථකව සුරකින ලදී!'}</span>
-                </div>
-            `;
-            document.body.appendChild(successDiv);
-            setTimeout(() => successDiv.remove(), 3000);
-        }
-
-        function showErrorMessage() {
-            const errorDiv = document.createElement('div');
-            errorDiv.innerHTML = `
-                <div style="position: fixed; top: 20px; right: 20px; 
-                            background: linear-gradient(45deg, #f44336, #d32f2f); color: white; 
-                            padding: 15px 20px; border-radius: 10px; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                    <span>${currentLanguage === 'en' ? '⚠ Error saving score. Please try again.' : '⚠ ලකුණු සුරකීමේ දෝෂයකි. නැවත උත්සාහ කරන්න.'}</span>
-                </div>
-            `;
-            document.body.appendChild(errorDiv);
-            setTimeout(() => errorDiv.remove(), 5000);
-        }
-
+        // Social sharing
         function shareResult(platform) {
             const score = document.getElementById('final-score').textContent;
-            const level = document.getElementById('iq-level').textContent;
-            
-            const shareText = currentLanguage === 'en' ? 
-                `I just scored ${score} IQ on this amazing IQ test! My level is ${level}. Try it yourself!` :
-                `මම මෙම විශිෂ්ට IQ පරීක්ෂණයෙන් ${score} IQ ලකුණු ලබා ගත්තා! මගේ මට්ටම ${level}. ඔබත් උත්සාහ කරන්න!`;
-            
+            const iqLevel = document.getElementById('iq-level').textContent;
+            const text = `I scored ${score} on the IQ Test Challenge! My level: ${iqLevel}`;
             const url = window.location.href;
             
-            let shareURL = '';
+            let shareUrl = '';
             
             switch (platform) {
                 case 'facebook':
-                    shareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
                     break;
                 case 'twitter':
-                    shareURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
                     break;
                 case 'whatsapp':
-                    shareURL = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + url)}`;
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
                     break;
                 case 'linkedin':
-                    shareURL = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
                     break;
             }
             
-            window.open(shareURL, '_blank', 'width=600,height=400');
+            window.open(shareUrl, '_blank', 'width=600,height=400');
         }
 
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+        // Leaderboard functionality
+        function saveScore() {
+            const scoreData = {
+                score: score,
+                total: currentSet.questions.length,
+                set: currentSet.title,
+                date: new Date().toISOString(),
+                language: currentLanguage
+            };
             
-            if (screenId === 'leaderboard-screen') {
-                loadLeaderboard();
+            let leaderboard = JSON.parse(localStorage.getItem('iqTestLeaderboard') || '[]');
+            leaderboard.push(scoreData);
+            
+            // Sort by score (descending)
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // Keep only top 10
+            leaderboard = leaderboard.slice(0, 10);
+            
+            localStorage.setItem('iqTestLeaderboard', JSON.stringify(leaderboard));
+        }
+
+        function loadLeaderboard() {
+            const leaderboard = JSON.parse(localStorage.getItem('iqTestLeaderboard') || '[]');
+            const container = document.getElementById('leaderboard');
+            
+            if (leaderboard.length === 0) {
+                container.innerHTML = '<p>' + (currentLanguage === 'en' ? 'No scores yet. Be the first to take the test!' : 'තවමත් ලකුණු නැත. පරීක්ෂණය ලබා ගැනීමට පළමු වන්න!') + '</p>';
+                return;
             }
-        }
-
-        function showHome() {
-            showScreen('home-screen');
-        }
-
-        function restartTest() {
-            showScreen('home-screen');
+            
+            container.innerHTML = '';
+            
+            leaderboard.forEach((entry, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                
+                const rank = index + 1;
+                const percentage = Math.round((entry.score / entry.total) * 100);
+                
+                item.innerHTML = `
+                    <div>
+                        <strong>#${rank}</strong>
+                        <span>${entry.set}</span>
+                    </div>
+                    <div>
+                        <strong>${entry.score}/${entry.total}</strong>
+                        <span>(${percentage}%)</span>
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
         }
 
         function showLeaderboard() {
             showScreen('leaderboard-screen');
+            loadLeaderboard();
         }
 
-        // Initialize app when page loads
-        window.onload = init;
-
-        // Prevent cheating by detecting developer tools
-        let devtools = {
-            open: false,
-            orientation: null
-        };
-
-        const threshold = 160;
-
-        setInterval(() => {
-            if (window.outerHeight - window.innerHeight > threshold || 
-                window.outerWidth - window.innerWidth > threshold) {
-                if (!devtools.open) {
-                    devtools.open = true;
-                    alert(currentLanguage === 'en' ? 
-                        'Developer tools detected! Please close them to continue.' :
-                        'සංවර්ධක මෙවලම් අනාවරණය විය! ඉදිරියට යාමට ඒවා වසන්න.');
-                }
-            } else {
-                devtools.open = false;
-            }
-        }, 500);
-
-        // Disable right-click context menu
-        document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // Disable common keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'C') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Add visual feedback for interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            const buttons = document.querySelectorAll('button');
-            buttons.forEach(button => {
+        // Add some visual feedback for better UX
+        function addVisualFeedback() {
+            // Add click effects to buttons
+            document.querySelectorAll('button').forEach(button => {
                 button.addEventListener('click', function() {
-                    this.classList.add('pulse');
-                    setTimeout(() => this.classList.remove('pulse'), 200);
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
                 });
             });
-        });
-
-        // Add leaderboard button to home screen
-        document.getElementById('home-screen').innerHTML += `
-            <button class="start-btn" onclick="showLeaderboard()" data-en="View Leaderboard" data-si="ලකුණු පුවරුව බලන්න" style="margin-top: 10px;">View Leaderboard</button>
-        `;
-
-        // Mobile-specific optimizations
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            document.body.classList.add('mobile');
             
-            // Prevent zoom on input focus
-            document.addEventListener('touchstart', function() {}, true);
-            
-            // Add touch feedback
-            document.addEventListener('touchstart', function(e) {
-                e.target.classList.add('touch-active');
+            // Add hover effects to options
+            document.addEventListener('mouseover', function(e) {
+                if (e.target.classList.contains('option')) {
+                    e.target.style.transform = 'translateY(-1px)';
+                }
             });
             
-            document.addEventListener('touchend', function(e) {
-                e.target.classList.remove('touch-active');
+            document.addEventListener('mouseout', function(e) {
+                if (e.target.classList.contains('option')) {
+                    e.target.style.transform = '';
+                }
             });
-
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPWwC4TQQIjVhVk31sRiDoPNDXkjn8CvffgJcMJU8KRQ1zPgoWIbKiFPsPZbKicteyFA/exec';
-
-      function submitScore() {
-        const name = document.getElementById('name').value;
-        const score = parseInt(document.getElementById('score').value);
-        const language = document.getElementById('language').value;
-
-        fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({
-            name,
-            score,
-            date: new Date().toLocaleDateString(),
-            timestamp: new Date().toISOString(),
-            language
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(res => res.json())
-        .then(data => {
-          alert(data.message);
-          loadLeaderboard();
-        })
-        .catch(err => {
-          alert('Error: ' + err);
-        });
-      }
-
-      function loadLeaderboard() {
-        fetch(SCRIPT_URL + '?action=getLeaderboard')
-          .then(res => res.json())
-          .then(data => {
-            const tbody = document.querySelector('#leaderboard tbody');
-            tbody.innerHTML = '';
-
-            data.scores.forEach(score => {
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                <td>${score.name}</td>
-                <td>${score.score}</td>
-                <td>${score.date}</td>
-                <td>${score.language}</td>
-              `;
-              tbody.appendChild(row);
-            });
-          });
-      }
-
-      // Load leaderboard on page load
-      window.onload = loadLeaderboard;
         }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('test-screen').classList.contains('active')) {
+                // Number keys 1-4 for answer selection
+                if (e.key >= '1' && e.key <= '4') {
+                    const answerIndex = parseInt(e.key) - 1;
+                    if (answerIndex < document.querySelectorAll('.option').length) {
+                        selectAnswer(answerIndex);
+                    }
+                }
+                
+                // Enter or Space for next question
+                if ((e.key === 'Enter' || e.key === ' ') && selectedAnswer !== null) {
+                    e.preventDefault();
+                    nextQuestion();
+                }
+            }
+        });
+
+        // Auto-save progress (in case of page reload)
+        window.addEventListener('beforeunload', function() {
+            if (currentSet && currentQuestion > 0 && currentQuestion < currentSet.questions.length) {
+                localStorage.setItem('iqTestProgress', JSON.stringify({
+                    currentSet: currentSet,
+                    currentQuestion: currentQuestion,
+                    score: score,
+                    startTime: startTime
+                }));
+            }
+        });
+
+        // Load progress on page load
+        window.addEventListener('load', function() {
+            const progress = localStorage.getItem('iqTestProgress');
+            if (progress) {
+                const data = JSON.parse(progress);
+                // Optionally restore progress - for now just clear it
+                localStorage.removeItem('iqTestProgress');
+            }
+        });
     </script>
-
-    <style>
-        .touch-active {
-            transform: scale(0.95);
-            transition: transform 0.1s ease;
-        }
-
-        .mobile .container {
-            padding: 15px;
-            border-radius: 15px;
-        }
-
-        .mobile .title {
-            font-size: 1.8em;
-        }
-
-        .mobile .question-container {
-            padding: 20px;
-        }
-
-        .mobile .option {
-            padding: 12px;
-            font-size: 0.9em;
-        }
-
-        .mobile .timer {
-            font-size: 1.2em;
-        }
-
-        .mobile .result-score {
-            font-size: 2.5em;
-        }
-
-        /* Loading animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 480px) {
-            .container {
-                margin: 5px;
-                padding: 15px;
-            }
-            
-            .title {
-                font-size: 1.5em;
-            }
-            
-            .question-text {
-                font-size: 1.1em;
-            }
-            
-            .option {
-                padding: 10px;
-            }
-            
-            .start-btn, .next-btn, .restart-btn {
-                padding: 12px 25px;
-                font-size: 1em;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            }
-            
-            .container {
-                background: rgba(44, 62, 80, 0.95);
-                color: white;
-            }
-            
-            .question-container {
-                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-                color: white;
-            }
-            
-            .option {
-                background: rgba(255, 255, 255, 0.1);
-                color: white;
-                border-color: rgba(255, 255, 255, 0.2);
-            }
-            
-            .leaderboard {
-                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-            }
-            
-            .leaderboard-item {
-                background: rgba(255, 255, 255, 0.1);
-                color: white;
-            }
-        }
-    </style>
 </body>
 </html>
